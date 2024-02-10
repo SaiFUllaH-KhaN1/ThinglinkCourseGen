@@ -22,7 +22,7 @@ import os
 from flask import Flask, render_template, request, session, flash, get_flashed_messages
 from io import BytesIO
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-load_dotenv(dotenv_path="E:\downloads\THINGLINK\Chat Foundation HTML 05 Jan DEMO - Copy\HUGGINGFACEHUB_API_TOKEN.env")
+load_dotenv(dotenv_path="HUGGINGFACEHUB_API_TOKEN.env")
 
 # llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.1, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
 # template = """You are a chatbot having a conversation with a human.
