@@ -219,20 +219,31 @@
                       pdfMake.createPdf(pdfContent).download();
                       alert("PDF Downloaded !");
                   }
-                  function GraphMLGen(text) {
-                      // Encode the text data
-                      var encodedText = encodeURIComponent(text);
-                      
-                      // Open the new tab with a URL that includes the textData parameter
-                      var newTab = window.open("/graphml?textData=" + encodedText, "_blank");
+		function GraphMLGen(text) {
+		    // Create a form element
+		    var form = document.createElement("form");
+		    form.method = "POST";
+		    form.action = "/graphml";  // URL to send the POST request to
 
-                      if (newTab) {
-                          // Focus on the new tab
-                          newTab.focus();
-                      } else {
-                          alert("Popup blocked. Please allow popups for this website.");
-                      }
-                    }
+		    // Create an input element to hold the text data
+		    var input = document.createElement("input");
+		    input.type = "hidden";
+		    input.name = "textData";
+		    input.value = text;
+
+		    // Append the input element to the form
+		    form.appendChild(input);
+
+		    // Open the new tab with the form as the content
+		    var newTab = window.open("", "_blank");
+		    if (newTab) {
+			newTab.document.body.appendChild(form);
+			form.submit();
+			newTab.focus();
+		    } else {
+			alert("Popup blocked. Please allow popups for this website.");
+		    }
+		}
                     function saveChatToSession(prompt, botResponse) {
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
                         chatHistory.push({ user: prompt, bot: botResponse });
