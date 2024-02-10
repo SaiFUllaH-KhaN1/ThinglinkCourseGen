@@ -27,13 +27,13 @@ from langchain.chat_models import ChatOpenAI
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 
-load_dotenv(dotenv_path="E:\downloads\THINGLINK\dante\HUGGINGFACEHUB_API_TOKEN.env")
+load_dotenv(dotenv_path="HUGGINGFACEHUB_API_TOKEN.env")
 # Set the API key for OpenAI
 openai.api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI()
 import io
 import os
-os.environ["OPENAI_API_KEY"] = "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"
+
 
 
 app = Flask(__name__)
