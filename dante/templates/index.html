@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Thinglink Course Gen</title>
+        <link rel="stylesheet" type="text/css" href="..\static\css\main.css"/>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/font-awesome.min.css">
+        <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.56/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.56/vfs_fonts.js"></script>
+        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+	</head>
+	
+	<body>
+        <div class="container">
+            <div class="column left-column">
+                <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Bot Icon" width="26" height="26" style='font: size 1em; border-radius: 0.5em; position: absolute; left: 4%; top: 5.5%;'><b style='font: size 1.1em; font-style: italic;font-family: Times New Roman; position: absolute;margin-top: 0.5%;margin-left: 0.5%;'></b><h1>Thinglink Course Gen</h1>
+
+                <h2>Tip:<br>Press the mic button to record, <br>then wait for Bot's <br> response automatically</h2>
+            </div>
+
+            <div class="column right-column">
+                {% for message in get_flashed_messages() %}
+                <p id="p2" style="position: absolute; top: 0%; align-items: center; font-size: medium;">{{ message }}</p>
+                {% endfor %}
+                {% if  filename  %}
+                <p id="p3" style="position: absolute; top: 0%; font-size: medium; align-items: center;font-style: italic;"><b>Upload and Processing completed for your file, </b><span style="font-style: italic;color: rgb(3, 90, 145);">{{filename}}</span></p>
+                {% endif %}
+
+                <!-- <div id="messageFormeight" class="card-body msg_card_body">							
+                </div> -->
+                <div id="chat-container" class="scrollable-container">
+                    <div id="messageFormeight" class="formatted-content">							
+                    </div> 
+                </div>
+                
+
+                <form id="chatForm" method="post" enctype="multipart/form-data"><br>
+                
+                    <textarea placeholder="Ask anything..." id="user_input" name="user_input" required></textarea>
+                    
+                    <button type="button" onclick="startRecording()" id="record"><i class="fa fa-microphone"></i></button>
+                    
+                    <button type="submit" id="generate" class="btn">
+                        <i class="fa fa-paper-plane"></i>
+                    </button>
+
+                </form>
+
+                <form id="fileuploadform" method="post" action="{{ url_for('index') }}" enctype="multipart/form-data"><br>
+                        <label for="uploadfile"><i class="fa-solid fa-paperclip" id="iconuploadfile"></i></label>
+                        <input type="file" id="uploadfile" name="file" accept=".pdf" onclick="opendialog_uploadfile();get_file_name()">
+                        
+                        <dialog id="dialog_uploadfile">
+                            <div id="uploaded_file_name" style="position: absolute; left: 4.5%;top: 40%;"></div>
+                            <label for="uploadfilebutton"><i class="fa-solid fa-file-arrow-up" id="iconuploadfilebutton" style="position: absolute; left: 1%; top: 30%; font-size: 1.8em;"></i></label>
+                            <button type="submit" id="uploadfilebutton">
+                            <button type="button" onclick="closedialog_uploadfile()" style="font-size: 65%;right: 1%;top: 1%;position: absolute; color: red; border: none; font-weight: bolder; border-radius: 0.5em;">X</button>
+                        </dialog>
+            </form>
+
+            <script>
+    
+                function startRecording() {
+                    var recognition = new webkitSpeechRecognition();
+                    recognition.lang = 'en-US';
+    
+                    recognition.onresult = function(event) {
+                        console.log('Executing speakBotResponse function');
+                        var transcript = event.results[0][0].transcript;
+                        document.getElementById('user_input').value = transcript;
+                        // Submit the form directly
+                        document.getElementById('generate').click();
+                    };
+    
+                    recognition.start();
+                }
+            </script>
+            
+            <script>
+                function scrollToBottom() {
+                    var messageContainer = $("#chat-container");
+                    messageContainer.scrollTop(messageContainer.prop("scrollHeight"));
+                }
+
+              $(document).ready(function() {
+                  //sessionStorage.removeItem('chatHistory');
+                  loadChatFromSession();
+                  
+                  console.log("loadChatFromSession called");
+                  var aborter = new AbortController();                      
+
+                  $("#chatForm").on("submit", function(event) {
+                      event.preventDefault();
+                      setTimeout(function() {
+                            $('#p3').fadeOut('fast');
+                            $('#p2').fadeOut('fast');
+                        }, 1000);
+                      var rawText = $("#user_input").val();
+                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p style='font-weight: normal;'>" +rawText+"</div>";
+                      
+                      $("#user_input").val("");
+                      $("#messageFormeight").append(userHtml);
+          
+                      var botResponseContainer = $("<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>");
+                      $("#messageFormeight").append(botResponseContainer);
+                      scrollToBottom();
+                      aborter.abort(); //cancel previous request
+                      aborter = new AbortController();
+                      const prompt = rawText;
+                      var chating_history = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
+                      fetch('/get', {
+                          signal: aborter.signal,
+                          method: 'POST',
+                          headers: {'Content-Type': 'application/json'},
+                          body: JSON.stringify({ prompt, chating_history })
+                      })
+                      .then(response => {
+                          const reader = response.body.getReader();
+                          return new ReadableStream({
+                              start(controller) {
+                                  function push() {
+                                      reader.read().then(({ done, value }) => {
+                                          if (done) {
+                                              controller.close();
+                                              addInteractionButtons(botResponseContainer); // Add buttons after the response is complete
+                                              var botResponse = botResponseContainer.text();
+                                              saveChatToSession(prompt, botResponse);
+                                              scrollToBottom();
+                                              fetch('/sessions_handling', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify({ botResponse: botResponse})
+                                                }); 
+                                              return;
+                                          }
+                                          botResponseContainer.append(new TextDecoder().decode(value));
+                                          push();
+                                      }).catch(err => {
+                                          console.error(err);
+                                          controller.error(err);
+                                      });
+                                  }
+                                  scrollToBottom();
+                                  push();
+                              }
+                          });
+                      })
+                      .catch(err => console.error(err));
+                  });
+          
+                  function addInteractionButtons(messageElement) {
+                      addCopyButton(messageElement);
+                      addPdfButton(messageElement);
+                      addGraphmlButton(messageElement);
+                  }
+          
+                  // Function to add a copy button to a given message element
+                  function addCopyButton(messageElement) {
+                      var copyButton = $("<button id='copyToClipboard' class='fa-solid fa-clipboard' style=' background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; margin-left: 0.5em; opacity: 0.4;' title='Copy text' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
+                      copyButton.click(function() {
+                          var textToCopy = messageElement.text();
+                          copyTextToClipboard(textToCopy);
+                      });
+                      messageElement.append(copyButton);
+                  }
+          
+                  function addPdfButton(messageElement) {
+                      var pdfgenButton = $("<button class='bi bi-file-earmark-pdf-fill' style=' background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight:1500; opacity: 0.4;' title='Download PDF' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
+                      pdfgenButton.click(function() {
+                          var textToCopy = messageElement.text();
+                          pdfGen(textToCopy);
+                      });
+                      messageElement.append(pdfgenButton);
+                  }
+                
+                  function addGraphmlButton(messageElement) {
+                      var GraphmlgenButton = $("<button class='fa-solid fa-code' style='background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight: 900; opacity: 0.4;' title='GraphML Generate' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
+                      GraphmlgenButton.click(function() {
+                          var textToCopy = messageElement.text();
+                          GraphMLGen(textToCopy);
+                      });
+                      messageElement.append(GraphmlgenButton);
+                  }
+
+                  // Function to copy text to clipboard
+                  function copyTextToClipboard(text) {
+                      var tempInput = $("<input>");
+                      $("body").append(tempInput);
+                      tempInput.val(text).select();
+                      document.execCommand("copy");
+                      tempInput.remove();
+                      alert("Copied to clipboard: " + text);
+                  }
+          
+                  // Function to copy text to clipboard
+                  function pdfGen(text) {
+                      var pdfContent = {
+                          content: [
+                              { text: text, style: 'text' },
+                          ],
+                          styles: { text: { alignment: 'justify' } },
+                          footer: function(currentPage, pageCount) {
+                              return {
+                                  text: 'Page ' + currentPage.toString() + ' of ' + pageCount.toString(),
+                                  alignment: 'center',
+                                  fontSize: 10,
+                              };
+                          },
+                      };
+                      pdfMake.createPdf(pdfContent).download();
+                      alert("PDF Downloaded !");
+                  }
+                  function GraphMLGen(text) {
+                      // Encode the text data
+                      var encodedText = encodeURIComponent(text);
+                      
+                      // Open the new tab with a URL that includes the textData parameter
+                      var newTab = window.open("/graphml?textData=" + encodedText, "_blank");
+
+                      if (newTab) {
+                          // Focus on the new tab
+                          newTab.focus();
+                      } else {
+                          alert("Popup blocked. Please allow popups for this website.");
+                      }
+                    }
+                    function saveChatToSession(prompt, botResponse) {
+                        let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
+                        chatHistory.push({ user: prompt, bot: botResponse });
+                        sessionStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                    }
+                    function loadChatFromSession() {
+                        scrollToBottom();
+                        let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
+                        chatHistory.forEach(chat => {
+                            // Append user message to the chat window
+                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p style='font-weight: normal;'>" + chat.user + "</div>";
+                            $("#messageFormeight").append(userHtml);
+
+                            // Append bot message to the chat window
+                            //"<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>"
+                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>" + chat.bot + "</div>";
+                            var botResponseContainer = $("<div></div>");
+                            botResponseContainer.html(botHtml);
+                            $("#messageFormeight").append(botResponseContainer);
+
+                            // Add interaction buttons to the bot message container
+                            addInteractionButtons(botResponseContainer);
+                        });
+                    }
+              });
+          </script>
+            <script>
+            function opendialog() {
+                var dialog_element = document.getElementById("dialog_new");
+                dialog_element.showModal() // Opens a modal
+            }
+            function closedialog() {
+                var dialog_element = document.getElementById("dialog_new");
+                dialog_element.close() // closes a dialog
+            }
+            function goBack() {
+                window.history.back();
+            }
+            </script>
+            <script>      
+                function sendDataToServer(data) {
+                    fetch('/get', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ response: data})
+                    });
+                }
+            </script>
+            <script>
+                function opendialog_uploadfile() {
+                    var dialog_element = document.getElementById("dialog_uploadfile");
+                    dialog_element.show() // Opens a modal
+                }
+                function closedialog_uploadfile() {
+                    var dialog_element = document.getElementById("dialog_uploadfile");
+                    dialog_element.close() // closes a dialog
+                }
+                function goBack() {
+                    window.history.back();
+                }
+            </script>
+            <script>
+                function get_file_name(){
+                    var input = document.getElementById( 'uploadfile' );
+                    var infoArea = document.getElementById( 'uploaded_file_name' );
+                    
+                    input.addEventListener( 'change', showFileName );
+                    
+                    function showFileName( event ) {
+                    
+                    // the change event gives us the input it occurred in 
+                    var input = event.srcElement;
+                    
+                    // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.
+                    var fileName = input.files[0].name;
+                    
+                    // use fileName however fits your app best, i.e. add it into a div
+                    infoArea.textContent = 'File name: ' + fileName;
+                    }
+                }
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

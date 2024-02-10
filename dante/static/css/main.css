@@ -1,0 +1,132 @@
+
+.formatted-content {
+    white-space: pre-line;
+    overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
+    max-width: 100%; /* Limit the width of the content */
+}
+
+.hidden_formatted_content{
+    white-space: pre-line;
+    overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
+    max-width: 100%; /* Limit the width of the content */
+}
+#dialog_new{border: rgb(102, 102, 102); border-radius: 0.5em;background-color: rgb(102, 102, 102);}
+#dialog_new::backdrop{
+    background-color: rgba(128, 128, 128, 0.589);
+}
+
+body{align-items: center; justify-content: center; text-align: center; background-color: rgb(23, 29, 112); margin: 0; padding: 0;}
+
+/* Create two equal columns that floats next to each other */
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.column {
+    padding: 1%;
+    box-sizing: border-box;
+  }
+
+.left-column{
+    width:20%;
+    height: 100%;
+    background-color: rgb(10, 10, 10);
+    position: absolute;
+}
+
+.right-column{
+    width:80%;
+    height: 100%;
+    background-color: rgb(151, 149, 149); 
+    position: absolute;
+    left: 20%;
+}
+
+h1{position: absolute;left: 16%;top: 4%; color: aliceblue; font-size: larger; align-items: center;font-family:Arial;}
+h2{position: absolute;left: 18%; bottom: 1%; color: rgb(10, 10, 10); font-size: medium; align-items: center; }
+
+form {
+    display: flex;
+    flex-direction:row;
+    align-items:self-end;
+}
+
+p{color: rgb(0, 0, 0); font-family: 'Arial';font-size: 1.1em; margin: 10px;}
+#p2{color: rgb(192, 0, 0);text-align: center}
+#p3{color: rgb(0, 0, 0); font-family: 'Arial';font-size: 1.1em; margin: 10px;}
+
+
+#chat-container{left:5%;position: absolute; top: 5.1%; border: 2px black; border-radius: 10px;
+margin-bottom: 10px ; width: 85%;height: 75%; overflow-y:auto; padding: 10px; font-family: 'Arial';text-align: justify;
+background-color: rgb(151, 149, 149); font-size: 1.1em;}
+
+textarea{position: absolute;
+bottom: 5%; left:5%;
+margin-bottom: 10px ; width: 75%;height: 5%;margin: 10px;border: solid 3px black; border-radius: 0.5em;font-family: 'Arial';text-align: center;
+font-size: 1.1em;}
+textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
+
+#generate,
+#record {
+    bottom: 5.5%;
+    width: 50%;
+    height: 5%;
+    margin: 10px;
+    border: solid 2px black;
+    border-radius: 10px;
+    font-family: 'Times New Roman';
+    text-align: center;
+    font-size: 1.2em;
+}
+
+#generate{position: absolute;right: 12%;background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);width: 5%;}
+#generate:hover{background-color:rgb(148, 148, 148) ; color:rgb(0, 0, 0);cursor: pointer; }
+#record{position: absolute;right: 7%; background-color: rgb(255, 255, 255);color: rgb(0, 0, 0);width: 5%;}
+#record:hover{background-color:rgb(148, 148, 148)  ; color:rgb(0, 0, 0);cursor: pointer; }
+
+/* #uploadfile{display: none} */
+#iconuploadfile{position: absolute;left: 3.5%;bottom: 8%;font-size: 150%;}
+#iconuploadfile:hover{color:rgb(255, 255, 255);cursor: pointer;}
+#uploadfile{display: none;}
+#dialog_uploadfile{position: absolute;
+    bottom: 11.5%; left:5%;
+    margin-bottom: 0.8em ; width: 73%;height: 2.5%;margin: 0.8em;font-family: 'Arial';text-align:left;
+    font-size: 0.8em; border: rgb(102, 102, 102); border-radius: 0.5em;background-color: rgb(102, 102, 102); }
+#uploadfilebutton{display: none;}
+#iconuploadfilebutton{position: absolute;left: 3.5%;bottom: 8%;font-size: 150%;}
+#iconuploadfilebutton:hover{color:rgb(255, 255, 255);cursor: pointer;}
+/* Media Query for smaller screens , min-width is to enable PC to give mobile view */
+@media only screen and (max-width: 1000px) {
+    h1 {
+        top: 5%;
+    }
+    #chat-container {
+        border: solid 2px black;
+        border-radius: 3px;
+        left: 29.5%;
+        height: 83%;
+    }
+
+    textarea {
+        left: 29%;
+        bottom: 0%;
+    }
+
+    #generate{
+        right: 8%;
+        bottom: 0.5%;
+    }
+    #record {
+        right: 3%;
+        bottom: 0.5%;
+    }
+    h2 {
+    position: absolute;
+    bottom: 5%;
+    color: aliceblue;
+    font-size: small;
+    }
+
+    
+}
