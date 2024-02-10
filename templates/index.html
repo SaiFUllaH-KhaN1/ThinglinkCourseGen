@@ -219,37 +219,31 @@
                       pdfMake.createPdf(pdfContent).download();
                       alert("PDF Downloaded !");
                   }
-		function GraphMLGen(text) {
-		    // Create a new XMLHttpRequest object
-		    var xhr = new XMLHttpRequest();
-		    // Specify the POST request
-		    xhr.open("POST", "/graphml", true);
-		    // Set the Content-Type header
-		    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		    // Define the callback function
-		    xhr.onreadystatechange = function() {
-		        if (xhr.readyState === XMLHttpRequest.DONE) {
-		            if (xhr.status === 200) {
-		                // If the request was successful, open a new tab with the response
-		                var newTab = window.open("", "_blank");
-		                if (newTab) {
-		                    newTab.document.open();
-		                    newTab.document.write(xhr.responseText);
-		                    newTab.document.close();
-		                    newTab.focus();
-		                } else {
-		                    alert("Popup blocked. Please allow popups for this website.");
-		                }
-		            } else {
-		                alert("Error: " + xhr.statusText);
-		            }
-		        }
-		    };
-		    // Encode the text data
-		    var encodedText = encodeURIComponent(text);
-		    // Send the request with the encoded text as the body
-		    xhr.send("textData=" + encodedText);
-		}
+                function GraphMLGen(text) {
+                    // Create a form element
+                    var form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "/graphml";  // URL to send the POST request to
+
+                    // Create an input element to hold the text data
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "textData";
+                    input.value = text;
+
+                    // Append the input element to the form
+                    form.appendChild(input);
+
+                    // Open the new tab with the form as the content
+                    var newTab = window.open("", "_blank");
+                    if (newTab) {
+                        newTab.document.body.appendChild(form);
+                        form.submit();
+                        newTab.focus();
+                    } else {
+                        alert("Popup blocked. Please allow popups for this website.");
+                    }
+                }
 
                     function saveChatToSession(prompt, botResponse) {
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
