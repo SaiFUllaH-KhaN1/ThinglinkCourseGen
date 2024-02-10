@@ -126,26 +126,29 @@ def graphml():
     graphml_content = ""
     plot_image_uri = ""
     output_graphml = ""
-    path_graphml = 'E:\downloads\THINGLINK\dante\graph.graphml'
-    if request.method == 'GET':
-        text_data = request.args.get('textData')
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    path_graphml = os.path.join(current_directory, 'graph.graphml')
+
+    if request.method == 'POST':
+        # Handle POST request
+        text_data = request.form.get('textData')
         if text_data:
             output_graphml = LCD.GENERATE_GRAPHML(text_data)
-            graphml_file_path = 'E:\downloads\THINGLINK\dante'
-            with open(os.path.join(graphml_file_path, 'graph.graphml'), 'w', encoding='utf-8') as graphml_file:
+            with open(path_graphml, 'w', encoding='utf-8') as graphml_file:
                 graphml_file.write(output_graphml)
-            
-            with open(path_graphml, 'r') as graphml_file:
-                graphml_content = graphml_file.read()
-    else:  # This block handles POST requests
+
+            graphml_content = output_graphml  # Use the generated GraphML content
+        else:
+            flash("No text data provided")
+    else:
+        # Handle GET request
         with open(path_graphml, 'r') as graphml_file:
             graphml_content = graphml_file.read()
-        width = request.form.get('width')
-        height = request.form.get('height')
+        width = request.args.get('width')
+        height = request.args.get('height')
         if width and height:
             try:
                 plot_image_uri = LCD.DRAW_GRAPH(path_graphml, width, height)
-                graphml_content = graphml_content
                 flash("The GraphML generated was compilable!")
             except:
                 flash("The GraphML is not compilable, Go back to Regenerate! ")
