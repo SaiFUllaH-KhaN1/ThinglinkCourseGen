@@ -20,17 +20,17 @@
 	<body>
         <div class="container">
             <div class="column left-column">
-                <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Bot Icon" width="26" height="26" style='font: size 1em; border-radius: 0.5em; position: absolute; left: 4%; top: 5.5%;'><b style='font: size 1.1em; font-style: italic;font-family: Times New Roman; position: absolute;margin-top: 0.5%;margin-left: 0.5%;'></b><h1>Thinglink Course Gen</h1>
+                <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Bot Icon" width="26" height="26" style='border-radius: 0.5em; position: absolute; left: 4%; top: 5.5%;'><b id="bmainimg" style='font: size 1.1em; font-style: italic;font-family: Times New Roman; position: absolute;margin-top: 0.5%;margin-left: 0.5%;'></b><h1>Thinglink Course Gen</h1>
 
                 <h2>Tip:<br>Press the mic button to record, <br>then wait for Bot's <br> response automatically</h2>
             </div>
 
             <div class="column right-column">
                 {% for message in get_flashed_messages() %}
-                <p id="p2" style="position: absolute; top: 0%; align-items: center; font-size: medium;">{{ message }}</p>
+                <p id="p2">{{ message }}</p>
                 {% endfor %}
                 {% if  filename  %}
-                <p id="p3" style="position: absolute; top: 0%; font-size: medium; align-items: center;font-style: italic;"><b>Upload and Processing completed for your file, </b><span style="font-style: italic;color: rgb(3, 90, 145);">{{filename}}</span></p>
+                <p id="p3"><b>Upload and Processing completed for your file, </b><span style="font-style: italic;color: rgb(3, 90, 145);">{{filename}}</span></p>
                 {% endif %}
 
                 <!-- <div id="messageFormeight" class="card-body msg_card_body">							
@@ -58,10 +58,10 @@
                         <input type="file" id="uploadfile" name="file" accept=".pdf" onclick="opendialog_uploadfile();get_file_name()">
                         
                         <dialog id="dialog_uploadfile">
-                            <div id="uploaded_file_name" style="position: absolute; left: 4.5%;top: 40%;"></div>
-                            <label for="uploadfilebutton"><i class="fa-solid fa-file-arrow-up" id="iconuploadfilebutton" style="position: absolute; left: 1%; top: 30%; font-size: 1.8em;"></i></label>
+                            <div id="uploaded_file_name"></div>
+                            <label for="uploadfilebutton"><i class="fa-solid fa-file-arrow-up" id="iconuploadfilebutton"></i></label>
                             <button type="submit" id="uploadfilebutton">
-                            <button type="button" onclick="closedialog_uploadfile()" style="font-size: 65%;right: 1%;top: 1%;position: absolute; color: red; border: none; font-weight: bolder; border-radius: 0.5em;">X</button>
+                            <button type="button" id="cross_red" onclick="closedialog_uploadfile()">X</button>
                         </dialog>
             </form>
 
@@ -108,7 +108,7 @@
                       $("#user_input").val("");
                       $("#messageFormeight").append(userHtml);
           
-                      var botResponseContainer = $("<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>");
+                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>");
                       $("#messageFormeight").append(botResponseContainer);
                       scrollToBottom();
                       aborter.abort(); //cancel previous request
@@ -219,6 +219,20 @@
                       pdfMake.createPdf(pdfContent).download();
                       alert("PDF Downloaded !");
                   }
+                //   function GraphMLGen(text) {
+                //       // Encode the text data
+                //       var encodedText = encodeURIComponent(text);
+                      
+                //       // Open the new tab with a URL that includes the textData parameter
+                //       var newTab = window.open("/graphml?textData=" + encodedText, "_blank");
+
+                //       if (newTab) {
+                //           // Focus on the new tab
+                //           newTab.focus();
+                //       } else {
+                //           alert("Popup blocked. Please allow popups for this website.");
+                //       }
+                //     }
                 function GraphMLGen(text) {
                     // Create a form element
                     var form = document.createElement("form");
@@ -244,7 +258,6 @@
                         alert("Popup blocked. Please allow popups for this website.");
                     }
                 }
-
                     function saveChatToSession(prompt, botResponse) {
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
                         chatHistory.push({ user: prompt, bot: botResponse });
@@ -298,7 +311,7 @@
             <script>
                 function opendialog_uploadfile() {
                     var dialog_element = document.getElementById("dialog_uploadfile");
-                    dialog_element.show() // Opens a modal
+                    dialog_element.show() // Opens a dialog
                 }
                 function closedialog_uploadfile() {
                     var dialog_element = document.getElementById("dialog_uploadfile");
