@@ -220,25 +220,6 @@
                   }
 
                 //   function GraphMLGen(text) {
-                //     // Package the text data into an object
-                //     var data = {
-                //         textData: text
-                //     };
-
-                //     // Open a new window
-                //     var newTab = window.open("/graphml", "_blank");
-
-                //     // Check if the new window was successfully opened
-                //     if (newTab) {
-                //         // Send the data to the new window using postMessage
-                //         newTab.postMessage(data, "*");
-                //     } else {
-                //         // Alert the user if the popup was blocked
-                //         alert("Popup blocked. Please allow popups for this website.");
-                //     }
-                // }
-
-                //   function GraphMLGen(text) {
                 //       // Encode the text data
                 //       var encodedText = encodeURIComponent(text);
                       
@@ -266,11 +247,12 @@
 
                     // Append the input element to the form
                     form.appendChild(input);
-
                     // Open the new tab with the form as the content
-                    var newTab = window.open("", "_blank");
-                    newTab.document.body.appendChild(form);
+                    // var newTab = window.open("", "_blank"); 
+                    // newTab.document.body.appendChild(form);
+                    document.body.appendChild(form);
                     form.submit();
+                    window.location.href = "/graphml";
                     if (newTab) {
                         newTab.focus();
                     } else {
