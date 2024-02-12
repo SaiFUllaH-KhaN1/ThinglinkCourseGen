@@ -5,7 +5,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="..\static\css\main_copy.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
+
     <body>
       <div class="row">
         <div class="column_left" style="background-color:#aaa;">
@@ -13,6 +15,7 @@
           <textarea name="graphcode" readonly>{{debug_output_graphml}}</textarea>
         </div>
         <div class="column_right" style="background-color:#bbb;">
+
           <form method="get" action="{{url_for('graphml')}}">
             <p><input type="number" name="width" placeholder="width (default 9)" min="3" max="30" maxlength="2" style="width: 13%;" required/>
             <input type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" style="width: 13%;" required/>
@@ -25,13 +28,33 @@
           {% if img_uri %}
             <img src="{{ img_uri }}" alt="Plot Image" id="img_graph">
           {% endif %}
+
+          <dialog id="dialog_uploadfile">
+            <button id="Generate_GraphML_Ini" onclick="Generate_GraphML_Initiate()">Generate GraphML</button>
+            <button type="button" id="cross_red" onclick="closedialog_uploadfile()">X</button>
+          </dialog>
+
         </div>
       </div>
 
       <script>
-          var chatContainer = document.getElementById("chat-container");
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-      </script>
-      
+        function openDialog() {
+            var dialog = document.getElementById('dialog_uploadfile');
+            if (dialog) {
+                dialog.showModal(); 
+            } else {
+                console.error('Dialog element not found.');
+            }
+        }
+        window.onload = openDialog;
+        function closedialog_uploadfile() {
+            var dialog_element = document.getElementById("dialog_uploadfile");
+            dialog_element.close()
+        }
+        function Generate_GraphML_Initiate(){
+          var textData= "{{text_data}}"
+          alert(textData)
+        }
+      </script>    
     </body>
 </html>
