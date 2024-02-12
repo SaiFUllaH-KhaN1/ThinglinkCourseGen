@@ -21,6 +21,12 @@
 h2{position: relative;left: 25%; color: rgb(3, 3, 3); font-size: larger; align-self: center;font-family:Arial;}
 textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; position: absolute; margin: 0.5%;}
 
+#dialog_uploadfile{
+    font-family: 'Arial';font-size: 0.8em; border: rgb(102, 102, 102); border-radius: 0.5em;background-color: rgb(102, 102, 102); }
+#dialog_uploadfile::backdrop{background-color: black;opacity: 70%;}
+#cross_red{font-size: 65%;right: 1%;top: 1%;position: absolute; color: red; border: none; font-weight: bolder; border-radius: 0.5em;}
+
+
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
     h1 {
