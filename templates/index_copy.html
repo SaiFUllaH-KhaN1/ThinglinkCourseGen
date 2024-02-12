@@ -46,7 +46,9 @@
                 console.error('Dialog element not found.');
             }
         }
-        window.onload = openDialog;
+        document.addEventListener('DOMContentLoaded', function() {
+            openDialog();
+        });
         function closedialog_uploadfile() {
             var dialog_element = document.getElementById("dialog_uploadfile");
             dialog_element.close()
