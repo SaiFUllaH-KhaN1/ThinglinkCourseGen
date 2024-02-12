@@ -27,10 +27,13 @@ from langchain.chat_models import ChatOpenAI
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 
-load_dotenv(dotenv_path="HUGGINGFACEHUB_API_TOKEN.env")
+load_dotenv(dotenv_path="E:\downloads\THINGLINK\dante\HUGGINGFACEHUB_API_TOKEN.env")
+# Set the API key for OpenAI
+openai.api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI()
 import io
 import os
-
+os.environ["OPENAI_API_KEY"] = "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"
 
 
 app = Flask(__name__)
@@ -121,6 +124,40 @@ def chat():
 #     last_10_messages = chating_history[-10:]
 #     return last_10_messages
 
+# @app.route('/graphml', methods=['GET', 'POST'])
+# def graphml():
+#     graphml_content = ""
+#     plot_image_uri = ""
+#     output_graphml = ""
+#     # Get the directory where the current Python script resides
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     path_graphml = os.path.join(current_directory, 'graph.graphml')
+#     # path_graphml = 'E:\downloads\THINGLINK\dante\graph.graphml'
+#     if request.method == 'GET':
+#         text_data = request.args.get('textData')
+#         if text_data:
+#             output_graphml = LCD.GENERATE_GRAPHML(text_data)
+#             graphml_file_path = current_directory #'E:\downloads\THINGLINK\dante'
+#             with open(os.path.join(graphml_file_path, 'graph.graphml'), 'w', encoding='utf-8') as graphml_file:
+#                 graphml_file.write(output_graphml)
+            
+#             with open(path_graphml, 'r') as graphml_file:
+#                 graphml_content = graphml_file.read()
+#     else:  # This block handles POST requests
+#         with open(path_graphml, 'r') as graphml_file:
+#             graphml_content = graphml_file.read()
+#         width = request.form.get('width')
+#         height = request.form.get('height')
+#         if width and height:
+#             try:
+#                 plot_image_uri = LCD.DRAW_GRAPH(path_graphml, width, height)
+#                 graphml_content = graphml_content
+#                 flash("The GraphML generated was compilable!")
+#             except:
+#                 flash("The GraphML is not compilable, Go back to Regenerate! ")
+
+#     return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data=output_graphml)
+
 @app.route('/graphml', methods=['GET', 'POST'])
 def graphml():
     graphml_content = ""
@@ -128,18 +165,18 @@ def graphml():
     output_graphml = ""
     current_directory = os.path.dirname(os.path.abspath(__file__))
     path_graphml = os.path.join(current_directory, 'graph.graphml')
-
     if request.method == 'POST':
-        # Handle POST request
-        text_data = request.form.get('textData')
-        if text_data:
-            output_graphml = LCD.GENERATE_GRAPHML(text_data)
-            with open(path_graphml, 'w', encoding='utf-8') as graphml_file:
-                graphml_file.write(output_graphml)
 
-            graphml_content = output_graphml  # Use the generated GraphML content
-        else:
-            flash("No text data provided")
+        text_data = request.form.get('textData')
+
+        # if text_data:
+        #     output_graphml = LCD.GENERATE_GRAPHML(text_data)
+        #     with open(path_graphml, 'w', encoding='utf-8') as graphml_file:
+        #         graphml_file.write(output_graphml)
+
+        #     graphml_content = output_graphml  # Use the generated GraphML content
+        # else:
+        #     flash("No text data provided")
     else:
         # Handle GET request
         with open(path_graphml, 'r') as graphml_file:
@@ -153,7 +190,7 @@ def graphml():
             except:
                 flash("The GraphML is not compilable, Go back to Regenerate! ")
 
-    return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data=output_graphml)
+    return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data=text_data)
 
 
 if __name__ == '__main__':
