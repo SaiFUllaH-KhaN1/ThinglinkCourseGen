@@ -160,7 +160,7 @@ def chat():
 
 @app.route('/graphml', methods=['GET', 'POST'])
 def graphml():
-    text_data = ""
+    # text_data = ""
     graphml_content = ""
     plot_image_uri = ""
     output_graphml = ""
@@ -179,17 +179,18 @@ def graphml():
         # else:
         #     flash("No text data provided")
     else:
-        # Handle GET request
-        with open(path_graphml, 'r') as graphml_file:
-            graphml_content = graphml_file.read()
-        width = request.args.get('width')
-        height = request.args.get('height')
-        if width and height:
-            try:
-                plot_image_uri = LCD.DRAW_GRAPH(path_graphml, width, height)
-                flash("The GraphML generated was compilable!")
-            except:
-                flash("The GraphML is not compilable, Go back to Regenerate! ")
+        text_data = ""
+        # # Handle GET request
+        # with open(path_graphml, 'r') as graphml_file:
+        #     graphml_content = graphml_file.read()
+        # width = request.args.get('width')
+        # height = request.args.get('height')
+        # if width and height:
+        #     try:
+        #         plot_image_uri = LCD.DRAW_GRAPH(path_graphml, width, height)
+        #         flash("The GraphML generated was compilable!")
+        #     except:
+        #         flash("The GraphML is not compilable, Go back to Regenerate! ")
 
     return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data=text_data)
 
