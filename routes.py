@@ -160,6 +160,7 @@ def chat():
 
 @app.route('/graphml', methods=['GET', 'POST'])
 def graphml():
+    text_data = ""
     graphml_content = ""
     plot_image_uri = ""
     output_graphml = ""
