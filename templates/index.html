@@ -180,8 +180,7 @@
                           pdfGen(textToCopy);
                       });
                       messageElement.append(pdfgenButton);
-                  }
-                
+                  }                
                   function addGraphmlButton(messageElement) {
                       var GraphmlgenButton = $("<button class='fa-solid fa-code' style='background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight: 900; opacity: 0.4;' title='GraphML Generate' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
                       GraphmlgenButton.click(function() {
@@ -219,6 +218,26 @@
                       pdfMake.createPdf(pdfContent).download();
                       alert("PDF Downloaded !");
                   }
+
+                //   function GraphMLGen(text) {
+                //     // Package the text data into an object
+                //     var data = {
+                //         textData: text
+                //     };
+
+                //     // Open a new window
+                //     var newTab = window.open("/graphml", "_blank");
+
+                //     // Check if the new window was successfully opened
+                //     if (newTab) {
+                //         // Send the data to the new window using postMessage
+                //         newTab.postMessage(data, "*");
+                //     } else {
+                //         // Alert the user if the popup was blocked
+                //         alert("Popup blocked. Please allow popups for this website.");
+                //     }
+                // }
+
                 //   function GraphMLGen(text) {
                 //       // Encode the text data
                 //       var encodedText = encodeURIComponent(text);
@@ -250,9 +269,9 @@
 
                     // Open the new tab with the form as the content
                     var newTab = window.open("", "_blank");
+                    newTab.document.body.appendChild(form);
+                    form.submit();
                     if (newTab) {
-                        newTab.document.body.appendChild(form);
-                        form.submit();
                         newTab.focus();
                     } else {
                         alert("Popup blocked. Please allow popups for this website.");
