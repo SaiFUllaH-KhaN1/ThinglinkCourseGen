@@ -247,18 +247,20 @@
 
                     // Append the input element to the form
                     form.appendChild(input);
-                    // Open the new tab with the form as the content
-                    // var newTab = window.open("", "_blank"); 
-                    // newTab.document.body.appendChild(form);
+                    
+                    // Append the form to the body
                     document.body.appendChild(form);
+                    
+                    // Handle form submission
+                    form.onsubmit = function() {
+                        // After form is submitted, redirect user to /graphml
+                        window.location.href = "/graphml";
+                    };
+                    
+                    // Submit the form
                     form.submit();
-                    window.location.href = "/graphml";
-                    if (newTab) {
-                        newTab.focus();
-                    } else {
-                        alert("Popup blocked. Please allow popups for this website.");
-                    }
                 }
+
                     function saveChatToSession(prompt, botResponse) {
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
                         chatHistory.push({ user: prompt, bot: botResponse });
