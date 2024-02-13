@@ -9,17 +9,32 @@
     </head>
 
     <body>
+
       <div class="row">
+
         <div class="column_left" style="background-color:#aaa;">
-          <h2>GraphML output</h2>
-          <textarea name="graphcode" readonly>{{debug_output_graphml}}</textarea>
+
+          <h2>GraphML</h2>
+          <div id="loader" class="loader">
+            <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Loading..." width="26" height="26" /><p id="load">Loading...</p>
+          </div>
+          <!-- <button id="Generate_GraphML_Ini" onclick="Generate_GraphML_Initiate()">Click to generate GraphML</button> -->
+          {% if debug_output_graphml %}
+          <textarea id="graphcode" name="graphcode" readonly style="visibility: visible;">{{ debug_output_graphml }}</textarea>
+          <textarea id="graphtext" style="visibility: hidden;">{{text_data_graphtext}}</textarea>
+          {% else %}
+          <textarea id="graphcode" name="graphcode" readonly style="visibility: hidden;">{{ debug_output_graphml }}</textarea>
+          <textarea id="graphtext" style="visibility: hidden;">{{text_data_graphtext}}</textarea>
+          {% endif %}
+          <!-- <textarea id="graphcode" name="graphcode" readonly style="visibility: hidden;">{{debug_output_graphml}}</textarea> -->
         </div>
+
         <div class="column_right" style="background-color:#bbb;">
 
           <form method="get" action="{{url_for('graphml')}}">
             <p><input type="number" name="width" placeholder="width (default 9)" min="3" max="30" maxlength="2" style="width: 13%;" required/>
             <input type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" style="width: 13%;" required/>
-            <input type="submit" value="Run" style="visibility: visible;" />
+            <input id="run" type="submit" value="Run" style="visibility: visible;"/>
             {%for message in get_flashed_messages()%}
               <b>{{message}}</b>
             {%endfor%}
@@ -29,34 +44,42 @@
             <img src="{{ img_uri }}" alt="Plot Image" id="img_graph">
           {% endif %}
 
-          <dialog id="dialog_uploadfile">
-            <button id="Generate_GraphML_Ini" onclick="Generate_GraphML_Initiate()">Generate GraphML</button>
-            <button type="button" id="cross_red" onclick="closedialog_uploadfile()">X</button>
-          </dialog>
-
         </div>
       </div>
 
       <script>
-        function openDialog() {
-            var dialog = document.getElementById('dialog_uploadfile');
-            if (dialog) {
-                dialog.showModal(); 
-            } else {
-                console.error('Dialog element not found.');
-            }
-        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            openDialog();
+          Generate_GraphML_Initiate();
         });
-        function closedialog_uploadfile() {
-            var dialog_element = document.getElementById("dialog_uploadfile");
-            dialog_element.close()
+        function Generate_GraphML_Initiate() {
+          var graphmltext = document.getElementById("graphtext").value; // Use .value to get the content
+          console.log("Sending data:", graphmltext); // Log the data being sent
+          fetch('/graphml', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ graphmltext: graphmltext })
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log("Received data:", data); // Log the received data
+              if(data.graphml_content) { // Ensure there's GraphML content in the response
+                  document.getElementById("graphcode").value = data.graphml_content;
+                  document.getElementById("graphcode").style.visibility = "visible";
+                  document.getElementById("loader").style.visibility = "hidden";
+              } else {
+                  // Handle error or empty data scenario
+                  console.error('No GraphML content received');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              // Handle errors here
+          });
         }
-        function Generate_GraphML_Initiate(){
-          var textData= "{{text_data}}"
-          alert(textData)
-        }
+
       </script>    
     </body>
 </html>
