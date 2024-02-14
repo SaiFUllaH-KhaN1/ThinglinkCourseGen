@@ -31,9 +31,9 @@
 
         <div class="column_right" style="background-color:#bbb;">
 
-          <form method="get" action="{{url_for('graphml')}}">
-            <p><input type="number" name="width" placeholder="width (default 9)" min="3" max="30" maxlength="2" style="width: 13%;" required/>
-            <input type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" style="width: 13%;" required/>
+          <form id="formforimg" method="get" action="{{url_for('graphml')}}">
+            <p><input id="width" type="number" name="width" placeholder="width (default 9)" min="3" max="30" maxlength="2" required/>
+            <input id="height" type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" required/>
             <input id="run" type="submit" value="Run" style="visibility: visible;"/>
             {%for message in get_flashed_messages()%}
               <b>{{message}}</b>
@@ -66,7 +66,7 @@
               if (!response.ok) { // Checks if response status is not OK
                   if (response.status === 502) {
                       // Specific handling for 502 Bad Gateway error
-                      alert('Server error: 502 Bad Gateway');
+                      alert('Server error: 502 Bad Gateway. Out of Memory?!');
                       // Here you can update the UI to show an appropriate message to the user
                   } else {
                       // Handle other HTTP status codes as needed
