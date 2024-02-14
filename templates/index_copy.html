@@ -16,7 +16,7 @@
 
           <h2>GraphML</h2>
           <div id="loader" class="loader">
-            <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Loading..." width="26" height="26" /><p id="load">Loading...</p>
+            <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Loading..."/><p id="load">Loading...</p>
           </div>
           <!-- <button id="Generate_GraphML_Ini" onclick="Generate_GraphML_Initiate()">Click to generate GraphML</button> -->
           {% if debug_output_graphml %}
@@ -67,10 +67,8 @@
                   if (response.status === 502) {
                       // Specific handling for 502 Bad Gateway error
                       alert('Server error: 502 Bad Gateway. Out of Memory?!');
+                      document.getElementById("loader").style.visibility = "hidden";
                       // Here you can update the UI to show an appropriate message to the user
-                  } else {
-                      // Handle other HTTP status codes as needed
-                      alert('Server error:', response.status);
                   }
                   return Promise.reject('Failed to fetch due to server error: ' + response.status);
               }
@@ -87,10 +85,6 @@
                   alert('No GraphML content received');
               }
           })
-          .catch(error => {
-              alert('Error:', error);
-              // Handle errors here
-          });
         }
 
       </script>    
