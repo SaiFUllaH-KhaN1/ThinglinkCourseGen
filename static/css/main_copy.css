@@ -23,7 +23,7 @@ textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; posit
 
 #Generate_GraphML_Ini{position: absolute; bottom: 5%;margin: 0.5%;left: 6vw;}
 .loader img {
-    animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite; width: 26px; height: 26px;
     border-radius: 0.5em; position: absolute; left: 8.5vw; top: 15vh;
 }
 #load{position: absolute; left: 11.5vw; top: 12.5vh;font-size: large;font-weight: bolder;}
@@ -31,8 +31,9 @@ textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; posit
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-#width{width: 13%;}
-#height{width: 13%;} 
+#width{width: 13%;left: 0.5vw;position: relative;}
+#height{width: 13%;left: 0.5vw;position: relative;} 
+#run{position: relative;left: 0.5vw;}
 
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
@@ -58,7 +59,11 @@ textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; posit
     top: 60vh;
     position: absolute;
 }
-#loader{left: 50vw;}
+.loader img {
+    border-radius: 0.5em; position: absolute; left: 48vw; top: 13.5vh;
+    width: 32px; height: 32px;
+}
+#load{left: 53vw;font-size: x-large;}
 h2{left: 50vw;font-size: xx-large;}
 textarea{color: rgb(0, 0, 0); width: 110vw;min-height: 53vh;max-height: 53vh; position: absolute;left: 5vw;font-size: medium;}
 #width{left: 1vw; position: relative;font-size: x-large;width: 20%;}
