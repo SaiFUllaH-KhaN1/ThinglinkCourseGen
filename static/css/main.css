@@ -52,7 +52,7 @@ form {
     align-items:self-end;
 }
 
-p{color: rgb(0, 0, 0); font-family: 'Arial';font-size: 1.1em; margin: 10px;}
+p{color: rgb(0, 0, 0); font-family: 'Arial';font-size: 1.1em; margin: 10px;white-space: pre-line;overflow-x: auto;max-width: 100%;}
 #p2{color: rgb(192, 0, 0);text-align: center;position: absolute; top: 0%; align-items: center; font-size: medium;}
 #p3{color: rgb(0, 0, 0); font-family: 'Arial'; margin: 10px;  position: absolute; top: 0%; font-size: medium; align-items: center;font-style: italic;}
 
@@ -146,10 +146,10 @@ textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
     #chat-container {
         border: solid 2px black;
         width: 105vw;
-        font-size: 175%;
+        font-size: medium;
         height: 80vh;
     }
-    #imgchat{width: 32px;height: 32px;}
+    #imgchat{width: 24px;height: 24px;}
 
     textarea {
         bottom: 2%;
@@ -178,6 +178,6 @@ textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
     color: aliceblue;
     font-size: small;
     }
-
+    p{color: rgb(0, 0, 0); font-family: 'Arial';font-size: smaller; margin: 10px;white-space: pre-line;overflow-x: auto;max-width: 100%;}
     
 }
