@@ -31,37 +31,38 @@ textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; posit
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+#width{width: 13%;}
+#height{width: 13%;} 
+
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
-    h1 {
-        top: 5%;
-    }
-    #chat-container {
-        border: solid 2px black;
-        border-radius: 3px;
-        left: 29.5%;
-        height: 83%;
-    }
-
-    textarea {
-        left: 29%;
-        bottom: 0%;
-    }
-
-    #generate{
-        right: 8%;
-        bottom: 0.5%;
-    }
-    #record {
-        right: 3%;
-        bottom: 0.5%;
-    }
-    h2 {
+.row {
+    display: flex;
+    flex-direction:row;
+    width: 100vw;
+}
+.column_left{
+    width:120vw;
+    min-height: 60vh;
+    max-height: 60vh;
+    left: 0vh;
+    background-color: rgb(10, 10, 10);
+    position:fixed;
+}
+.column_right{
+    width:120vw;
+    min-height: 60vh;
+    max-height: 60vh;
+    left: -0.8vw;
+    background-color: rgb(151, 149, 149); 
+    top: 60vh;
     position: absolute;
-    bottom: 5%;
-    color: aliceblue;
-    font-size: small;
-    }
-
-    
+}
+#loader{left: 50vw;}
+h2{left: 50vw;font-size: xx-large;}
+textarea{color: rgb(0, 0, 0); width: 110vw;min-height: 53vh;max-height: 53vh; position: absolute;left: 5vw;font-size: medium;}
+#width{left: 1vw; position: relative;font-size: x-large;width: 20%;}
+#height{left: 1vw;position: relative;font-size: x-large;width: 20%;} 
+#run{font-size: x-large;position: relative;left: 1vw;}
+b{font-size: x-large;}
 }
