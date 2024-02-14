@@ -1,15 +1,3 @@
-
-.formatted-content {
-    white-space: pre-line;
-    overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
-    max-width: 100%; /* Limit the width of the content */
-}
-
-.hidden_formatted_content{
-    white-space: pre-line;
-    overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
-    max-width: 100%; /* Limit the width of the content */
-}
 #dialog_new{border: rgb(102, 102, 102); border-radius: 0.5em;background-color: rgb(102, 102, 102);}
 #dialog_new::backdrop{
     background-color: rgba(128, 128, 128, 0.589);
