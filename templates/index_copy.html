@@ -62,7 +62,20 @@
               },
               body: JSON.stringify({ graphmltext: graphmltext })
           })
-          .then(response => response.json())
+          .then(response => {
+              if (!response.ok) { // Checks if response status is not OK
+                  if (response.status === 502) {
+                      // Specific handling for 502 Bad Gateway error
+                      alert('Server error: 502 Bad Gateway');
+                      // Here you can update the UI to show an appropriate message to the user
+                  } else {
+                      // Handle other HTTP status codes as needed
+                      alert('Server error:', response.status);
+                  }
+                  return Promise.reject('Failed to fetch due to server error: ' + response.status);
+              }
+              return response.json(); // Proceed to process the response if no error
+          })
           .then(data => {
               console.log("Received data:", data); // Log the received data
               if(data.graphml_content) { // Ensure there's GraphML content in the response
@@ -71,11 +84,11 @@
                   document.getElementById("loader").style.visibility = "hidden";
               } else {
                   // Handle error or empty data scenario
-                  console.error('No GraphML content received');
+                  alert('No GraphML content received');
               }
           })
           .catch(error => {
-              console.error('Error:', error);
+              alert('Error:', error);
               // Handle errors here
           });
         }
