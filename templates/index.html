@@ -103,12 +103,12 @@
                             $('#p2').fadeOut('fast');
                         }, 1000);
                       var rawText = $("#user_input").val();
-                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p style='style='white-space: pre-line;overflow-x: auto;max-width: 100%;'>" +rawText+"</div>";
+                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p>" +rawText+"</div>";
                       
                       $("#user_input").val("");
                       $("#messageFormeight").append(userHtml);
           
-                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='border-radius: 0.5em;'><br>"+"<p style='white-space: pre-line;overflow-x: auto;max-width: 100%;'></p>"+"</div>");
+                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='border-radius: 0.5em;'><br>"+"<p></p>"+"</div>");
                       $("#messageFormeight").append(botResponseContainer);
                       scrollToBottom();
                       aborter.abort(); //cancel previous request
@@ -271,12 +271,12 @@
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
                         chatHistory.forEach(chat => {
                             // Append user message to the chat window
-                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p style='style='white-space: pre-line;overflow-x: auto;max-width: 100%;'>" + chat.user + "</div>";
+                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p>" + chat.user + "</div>";
                             $("#messageFormeight").append(userHtml);
 
                             // Append bot message to the chat window
                             //"<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>"
-                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='26' height='26' style='border-radius: 0.5em;'><br>"+"<p style='style='white-space: pre-line;overflow-x: auto;max-width: 100%;'></p>" + chat.bot + "</div>";
+                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='border-radius: 0.5em;'><br>"+"<p></p>" + chat.bot + "</div>";
                             var botResponseContainer = $("<div></div>");
                             botResponseContainer.html(botHtml);
                             $("#messageFormeight").append(botResponseContainer);
