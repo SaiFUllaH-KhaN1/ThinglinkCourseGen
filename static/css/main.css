@@ -1,3 +1,15 @@
+
+.formatted-content {
+    white-space: pre-line;
+    overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
+    max-width: 100%; /* Limit the width of the content */
+}
+
+.hidden_formatted_content{
+    white-space: pre-line;
+    overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
+    max-width: 100%; /* Limit the width of the content */
+}
 #dialog_new{border: rgb(102, 102, 102); border-radius: 0.5em;background-color: rgb(102, 102, 102);}
 #dialog_new::backdrop{
     background-color: rgba(128, 128, 128, 0.589);
@@ -43,11 +55,12 @@ form {
 p{color: rgb(0, 0, 0); font-family: 'Arial';font-size: 1.1em; margin: 10px;white-space: pre-line;overflow-x: auto;max-width: 100%;}
 #p2{color: rgb(192, 0, 0);text-align: center;position: absolute; top: 0%; align-items: center; font-size: medium;}
 #p3{color: rgb(0, 0, 0); font-family: 'Arial'; margin: 10px;  position: absolute; top: 0%; font-size: medium; align-items: center;font-style: italic;}
-
+i{font-size: 1em}
+#imgchat{width:24px; height:24px; border-radius: 0.5em;}
 
 #chat-container{left:5%;position: absolute; top: 5.1%; border: 2px black; border-radius: 10px;
 margin-bottom: 10px ; width: 85%;height: 75%; overflow-y:auto; padding: 10px; font-family: 'Arial';text-align: justify;
-background-color: rgb(151, 149, 149); font-size: 1.1em;}
+background-color: rgb(151, 149, 149);}
 
 textarea{position: absolute;
 bottom: 5%; left:5%;
@@ -86,8 +99,22 @@ textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
 #iconuploadfilebutton:hover{color:rgb(255, 255, 255);cursor: pointer;}
 #uploaded_file_name{position: absolute; left: 4.5%;top: 40%;}
 #cross_red{font-size: 65%;right: 1%;top: 1%;position: absolute; color: red; border: none; font-weight: bolder; border-radius: 0.5em;}
+
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
+    .formatted-content {
+        white-space: pre-line;
+        overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
+        max-width: 100%; /* Limit the width of the content */
+        font-size: 26px;
+    }
+    
+    .hidden_formatted_content{
+        white-space: pre-line;
+        overflow-x: auto; /* Add this to enable horizontal scrolling if needed */
+        max-width: 100%; /* Limit the width of the content */
+        font-size: 26px;
+    }
     #iconuploadfilebutton{left: 2%;position: absolute;}
     #uploaded_file_name{position: absolute; left: 8%;}
     #dialog_uploadfile{width: 100vw;bottom: 7vh;left:3vw;font-size: xx-large;}
@@ -134,13 +161,11 @@ textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
     #chat-container {
         border: solid 2px black;
         width: 105vw;
-        font-size: medium;
         height: 80vh;
     }
-    #imgchat{width: 24px;height: 24px;}
 
     textarea {
-        bottom: 2%;
+        bottom: 3%;
         width: 80%;
         font-size:175%;
     }
@@ -150,15 +175,15 @@ textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
         right: 7.5%;
         bottom: 3%;
         font-size: 200%;
-        height: 3.5%;
-        min-height: 3.4%;
+        height: 64px;
+        border-radius: 10px;
     }
     #record {
         right: 2.5%;
         bottom: 3%;
         font-size: 200%;
-        height: 3.5%;
-        min-height: 3.4%;
+        height: 64px;
+        border-radius: 10px;
     }
     h2 {
     position: absolute;
@@ -166,6 +191,7 @@ textarea:focus{border: solid 3px rgb(148, 148, 148); outline: none;}
     color: aliceblue;
     font-size: small;
     }
-    p{color: rgb(0, 0, 0); font-family: 'Arial';font-size: smaller; margin: 10px;white-space: pre-line;overflow-x: auto;max-width: 100%;}
-    
+    p{color: rgb(0, 0, 0); font-family: 'Arial';font-size:26px; margin: 10px;white-space: pre-line;overflow-x: auto;max-width: 100%;}
+    i{font-size: 30px}
+    #imgchat{width: 30px;height: 30px;}
 }
