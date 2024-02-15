@@ -35,7 +35,6 @@ import io
 import os
 
 
-
 app = Flask(__name__)
 app.secret_key = '123'
 
@@ -107,7 +106,8 @@ def index():
             # docsearch = LCD.RAG(open(f_saved, 'rb'))  
 
             docsearch.save_local("faiss_index")
-    return render_template('index.html', filename=filename)
+            session['file_uploaded'] = True
+    return render_template('index.html', filename=filename, file_uploaded=session.get('file_uploaded', False))
 
 @app.route("/get", methods=["GET", "POST"])
 def chat():
@@ -178,8 +178,8 @@ def graphml():
                 graphml_content = output_graphml
                 return jsonify({'graphml_content': output_graphml})
             else:
-                flash("No text data provided")
-                return jsonify({'error': 'No text data provided'}), 400
+                print("No text data provided")
+                # return jsonify({'error': 'No text data provided'}), 400
         else:  # If request contains form data
             text_datas = request.form.get('textData')
     else:
@@ -196,6 +196,39 @@ def graphml():
                 flash("The GraphML is not compilable, Go back to Regenerate! ")
 
     return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data_graphtext=text_datas)
+
+# @app.route('/graphmlini', methods=['GET', 'POST'])
+# def graphmlini():
+#     graphml_content = ""
+#     plot_image_uri = ""
+#     output_graphml = ""
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     path_graphml = os.path.join(current_directory, 'graph.graphml')
+#     if request.method == 'POST':
+#         data = request.json
+#         text_data = data.get('graphmltext')
+#         if text_data:
+#             output_graphml = LCD.GENERATE_GRAPHML(text_data)
+#             with open(path_graphml, 'w', encoding='utf-8') as graphml_file:
+#                 graphml_file.write(output_graphml)
+
+#             graphml_content = output_graphml  # Use the generated GraphML content
+#         else:
+#             flash("No text data provided")
+#     else:
+#         # Handle GET request
+#         with open(path_graphml, 'r') as graphml_file:
+#             graphml_content = graphml_file.read()
+#         width = request.args.get('width')
+#         height = request.args.get('height')
+#         if width and height:
+#             try:
+#                 plot_image_uri = LCD.DRAW_GRAPH(path_graphml, width, height)
+#                 flash("The GraphML generated was compilable!")
+#             except:
+#                 flash("The GraphML is not compilable, Go back to Regenerate! ")
+
+#     return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data=text_data)
 
 
 if __name__ == '__main__':
