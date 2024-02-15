@@ -43,7 +43,7 @@
 
                 <form id="chatForm" method="post" enctype="multipart/form-data"><br>
                 
-                    <textarea placeholder="Ask anything..." id="user_input" name="user_input" required></textarea>
+                    <textarea placeholder="Message Thinglink Scenario..." id="user_input" name="user_input" required></textarea>
                     
                     <button type="button" onclick="startRecording()" id="record"><i class="fa fa-microphone"></i></button>
                     {% if file_uploaded %}
@@ -99,7 +99,7 @@
                     });
                     function autoAdjustHeight() {
                         // Set the height back to a small height to reset the scroll height calculation
-                        textarea.style.height = '2%';
+                        textarea.style.height = '3%';
                         // Adjust the height of textarea based on its scroll height
                         textarea.style.height = (textarea.scrollHeight) + 'px';
                     }
@@ -131,12 +131,12 @@
                             $('#p2').fadeOut('fast');
                         }, 1000);
                       var rawText = $("#user_input").val();
-                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user'></i>" + "<p>" +rawText+"</div>";
+                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user' id='i_user'></i>" + "<p>" +rawText+"</div>";
                       
                       $("#user_input").val("");
                       $("#messageFormeight").append(userHtml);
           
-                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon'><br>"+"<p>"+"</div>");
+                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon'>"+"<p>"+"</div>");
                       $("#messageFormeight").append(botResponseContainer);
                       scrollToBottom();
                       aborter.abort(); //cancel previous request
@@ -193,7 +193,7 @@
           
                   // Function to add a copy button to a given message element
                   function addCopyButton(messageElement) {
-                      var copyButton = $("<button id='copyToClipboard' class='fa-solid fa-clipboard' style=' background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; margin-left: 0.5em; opacity: 0.4;' title='Copy text' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
+                      var copyButton = $("<button id='copyToClipboard' class='fa-solid fa-clipboard' title='Copy text' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
                       copyButton.click(function() {
                           var textToCopy = messageElement.text();
                           copyTextToClipboard(textToCopy);
@@ -202,7 +202,7 @@
                   }
           
                   function addPdfButton(messageElement) {
-                      var pdfgenButton = $("<button class='bi bi-file-earmark-pdf-fill' style=' background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight:1500; opacity: 0.4;' title='Download PDF' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
+                      var pdfgenButton = $("<button id='pdfgenbutton' class='bi bi-file-earmark-pdf-fill' title='Download PDF' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
                       pdfgenButton.click(function() {
                           var textToCopy = messageElement.text();
                           pdfGen(textToCopy);
@@ -210,7 +210,7 @@
                       messageElement.append(pdfgenButton);
                   }                
                   function addGraphmlButton(messageElement) {
-                      var GraphmlgenButton = $("<button class='fa-solid fa-code' style='background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight: 900; opacity: 0.4;' title='GraphML Generate' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
+                      var GraphmlgenButton = $("<button id='graphmlgenbutton' class='fa-solid fa-code' title='GraphML Generate' onmouseover='this.style.opacity=\"1\"' onmouseout='this.style.opacity=\"0.5\"'></button>");
                       GraphmlgenButton.click(function() {
                           var textToCopy = messageElement.text();
                           GraphMLGen(textToCopy);
@@ -299,13 +299,13 @@
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
                         chatHistory.forEach(chat => {
                             // Append user message to the chat window
-                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user'></i>" + "<p>" + chat.user + "</div>";
+                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user' id='i_user'></i>" + "<p>" + chat.user + "</div>";
                             $("#messageFormeight").append(userHtml);
 
                             // Append bot message to the chat window
                             //"<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>"
                             
-                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' id='imgchat' alt='Bot Icon'><br>"+"<p></p>" + chat.bot + "</div>";
+                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' id='imgchat' alt='Bot Icon'>"+"<p>" + chat.bot + "</div>";
                             var botResponseContainer = $("<div></div>");
                             botResponseContainer.html(botHtml);
 
