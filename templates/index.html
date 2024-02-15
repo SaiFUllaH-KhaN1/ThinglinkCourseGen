@@ -36,7 +36,7 @@
                 <!-- <div id="messageFormeight" class="card-body msg_card_body">							
                 </div> -->
                 <div id="chat-container" class="scrollable-container">
-                    <div id="messageFormeight">							
+                    <div id="messageFormeight" class="formatted-content">							
                     </div> 
                 </div>
                 
@@ -46,11 +46,15 @@
                     <textarea placeholder="Ask anything..." id="user_input" name="user_input" required></textarea>
                     
                     <button type="button" onclick="startRecording()" id="record"><i class="fa fa-microphone"></i></button>
-                    
-                    <button type="submit" id="generate" class="btn">
-                        <i class="fa fa-paper-plane"></i>
-                    </button>
-
+                    {% if file_uploaded %}
+                        <button type="submit" id="generate" class="btn">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    {% else %}
+                        <button type="button" id="generate" class="btn" onclick="caution()">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    {% endif %}
                 </form>
 
                 <form id="fileuploadform" method="post" action="{{ url_for('index') }}" enctype="multipart/form-data"><br>
@@ -81,6 +85,30 @@
     
                     recognition.start();
                 }
+                document.addEventListener("DOMContentLoaded", function() {
+                    var userInput = document.getElementById("user_input");
+                    var generateButton = document.getElementById("generate");
+                    var textarea = document.getElementById("user_input");
+
+                    userInput.addEventListener("keypress", function(event) {
+                        // Check if the Enter key is pressed without Shift or Ctrl
+                        if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
+                            event.preventDefault(); // Prevent the default action to stop from adding a new line
+                            generateButton.click(); // Simulate clicking the "Generate" button
+                        }
+                    });
+                    function autoAdjustHeight() {
+                        // Set the height back to a small height to reset the scroll height calculation
+                        textarea.style.height = '2%';
+                        // Adjust the height of textarea based on its scroll height
+                        textarea.style.height = (textarea.scrollHeight) + 'px';
+                    }
+                    textarea.addEventListener('input', autoAdjustHeight);
+                    autoAdjustHeight();
+                });
+                function caution(){
+                    alert("Please Upload a file first!");
+                }
             </script>
             
             <script>
@@ -103,12 +131,12 @@
                             $('#p2').fadeOut('fast');
                         }, 1000);
                       var rawText = $("#user_input").val();
-                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p>" +rawText+"</div>";
+                      var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user'></i>" + "<p>" +rawText+"</div>";
                       
                       $("#user_input").val("");
                       $("#messageFormeight").append(userHtml);
           
-                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='border-radius: 0.5em;'><br>"+"<p></p>"+"</div>");
+                      var botResponseContainer = $("<div><img id='imgchat' src='/static/icons/ThingLink-Icon.png' alt='Bot Icon'><br>"+"<p>"+"</div>");
                       $("#messageFormeight").append(botResponseContainer);
                       scrollToBottom();
                       aborter.abort(); //cancel previous request
@@ -142,7 +170,7 @@
                                                 }); 
                                               return;
                                           }
-                                          botResponseContainer.append(new TextDecoder().decode(value));
+                                          botResponseContainer.find('p').append(new TextDecoder().decode(value));
                                           push();
                                       }).catch(err => {
                                           console.error(err);
@@ -271,14 +299,17 @@
                         let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
                         chatHistory.forEach(chat => {
                             // Append user message to the chat window
-                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i style='font: size 1em' class='fa fa-user'></i>" + "<p>" + chat.user + "</div>";
+                            var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user'></i>" + "<p>" + chat.user + "</div>";
                             $("#messageFormeight").append(userHtml);
 
                             // Append bot message to the chat window
                             //"<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='font: size 1em; border-radius: 0.5em;'><br>"+"<p style='font-weight: normal;'></p>"+"</div>"
-                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' alt='Bot Icon' width='24' height='24' style='border-radius: 0.5em;'><br>"+"<p></p>" + chat.bot + "</div>";
+                            
+                            var botHtml = "<div><img src='/static/icons/ThingLink-Icon.png' id='imgchat' alt='Bot Icon'><br>"+"<p></p>" + chat.bot + "</div>";
                             var botResponseContainer = $("<div></div>");
                             botResponseContainer.html(botHtml);
+
+                            // var botResponseContainer = $("<div><img src='/static/icons/ThingLink-Icon.png' id='imgchat' alt='Bot Icon'><br>"+"<p></p>" + chat.bot + "</div>");
                             $("#messageFormeight").append(botResponseContainer);
 
                             // Add interaction buttons to the bot message container
