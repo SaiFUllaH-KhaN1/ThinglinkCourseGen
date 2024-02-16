@@ -186,10 +186,10 @@ textarea{position: absolute;
     
     #inputforms{position: absolute;bottom: 3%;width: 100%;height: 10%;}
     /* #fileupload_inputforms{position: absolute;} */
-    #iconuploadfile{position: absolute;left: 1.5%;font-size: 300%;align-items: center;}
+    #iconuploadfile{position: absolute;left: 1.5%;font-size: 300%;align-items: center;bottom:10%;}
     #iconuploadfilebutton{left: 2%;position: absolute;}
     #uploaded_file_name{position: absolute; left: 8%;}
-    #dialog_uploadfile{width: 100vw;left:3vw;height: 4vh;font-size: xx-large;position: relative;margin-block-start: -5%;}
+    #dialog_uploadfile{width: 100vw;left:0.8%;height: 4vh;font-size: xx-large;position: relative;margin-block-start: -5%;}
     #cross_red{font-size: 100%;}
 
     textarea {
