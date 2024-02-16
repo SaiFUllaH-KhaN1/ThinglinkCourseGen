@@ -1,3 +1,4 @@
+pandas
 gevent
 langsmith
 langchain-community
