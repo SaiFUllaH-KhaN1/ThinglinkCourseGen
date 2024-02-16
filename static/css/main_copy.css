@@ -69,5 +69,5 @@ textarea{color: rgb(0, 0, 0); width: 110vw;min-height: 53vh;max-height: 53vh; po
 #width{left: 1vw; position: relative;font-size: x-large;width: 20%;}
 #height{left: 1vw;position: relative;font-size: x-large;width: 20%;} 
 #run{font-size: x-large;position: relative;left: 1vw;}
-b{font-size: x-large;left: 0.5vw;}
+b{font-size: x-large;left: 0.5vw;position: relative;}
 }
