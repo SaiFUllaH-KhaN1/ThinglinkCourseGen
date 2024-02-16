@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, Response, jsonify, session, s
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain import OpenAI
+from langchain_community.llms import OpenAI
 from langchain_community.chat_models import ChatOpenAI
 import os
 import openai
@@ -232,4 +232,4 @@ def graphml():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run()
