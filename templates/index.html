@@ -40,7 +40,7 @@
                     </div> 
                 </div>
                 
-
+                <div id="inputforms">
                 <form id="chatForm" method="post" enctype="multipart/form-data"><br>
                 
                     <textarea placeholder="Message Thinglink Scenario..." id="user_input" name="user_input" required></textarea>
@@ -56,7 +56,7 @@
                         </button>
                     {% endif %}
                 </form>
-
+                
                 <form id="fileuploadform" method="post" action="{{ url_for('index') }}" enctype="multipart/form-data"><br>
                         <label for="uploadfile"><i class="fa-solid fa-paperclip" id="iconuploadfile"></i></label>
                         <input type="file" id="uploadfile" name="file" accept=".pdf" onclick="opendialog_uploadfile();get_file_name()">
@@ -67,8 +67,10 @@
                             <button type="submit" id="uploadfilebutton">
                             <button type="button" id="cross_red" onclick="closedialog_uploadfile()">X</button>
                         </dialog>
-            </form>
-
+                    </form>
+                    
+                    </div>
+                </div>
             <script>
     
                 function startRecording() {
