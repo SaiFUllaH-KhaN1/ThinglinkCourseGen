@@ -1,3 +1,4 @@
+semantic-router
 pandas
 gevent
 langsmith
