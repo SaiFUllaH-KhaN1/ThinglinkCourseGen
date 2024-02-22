@@ -14,9 +14,9 @@
 
         <div class="column_left" style="background-color:#aaa;">
 
-          <h2>GraphML</h2>
+          <h2>GraphML</h2><button id="backbtn"><a href="/" id="backbtnhref">Go Back</a></button>
           <div id="loader" class="loader">
-            <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Loading..."/><p id="load">Loading...</p>
+            <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="..."/><p id="load">Loading...</p>
           </div>
           <!-- <button id="Generate_GraphML_Ini" onclick="Generate_GraphML_Initiate()">Click to generate GraphML</button> -->
           {% if debug_output_graphml %}
@@ -86,7 +86,9 @@
               }
           })
         }
-
+        function goback(){
+          document.getElementById('backbtn').red
+        }
       </script>    
     </body>
 </html>
