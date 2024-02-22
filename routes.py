@@ -27,12 +27,13 @@ from langchain.chat_models import ChatOpenAI
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 
-load_dotenv(dotenv_path="HUGGINGFACEHUB_API_TOKEN.env")
+load_dotenv(dotenv_path="E:\downloads\THINGLINK\dante\HUGGINGFACEHUB_API_TOKEN.env")
 # Set the API key for OpenAI
 openai.api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI()
 import io
 import os
+os.environ["OPENAI_API_KEY"] = "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"
 
 
 app = Flask(__name__)
@@ -64,24 +65,25 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs):
         self.gen.send(token)
 
-def llm_thread(g, prompt, last_messages):
+def llm_thread(g, prompt, last_messages,scenario):
     try:
         llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
-        chain, docs, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm)
+        print("SCENARIO ====",scenario)
+        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario)
         chating_history = last_messages
-        print(docs)
+        print(docs_main)
         print("chating_history",chating_history)
-        chain({"input_documents": docs, "human_input": query, "subject_name": subject_name,"chat_history": chating_history})
+        chain.run({"input_documents": docs_main, "human_input": query, "subject_name": subject_name,"chat_history": chating_history})
     finally:
         g.close()
 
 
-def chain(prompt, last_messages):
+def chain(prompt, last_messages,scenario):
     if prompt != "":
         g = ThreadedGenerator()
-        threading.Thread(target=llm_thread, args=(g, prompt, last_messages)).start()
+        threading.Thread(target=llm_thread, args=(g, prompt, last_messages,scenario)).start()
         return g
 
 @app.route("/", methods=["GET", "POST"])
@@ -114,9 +116,14 @@ def chat():
     data = request.json
     user_input = data.get('prompt')
     chating_history = data.get('chating_history')
+    scenario = data.get('scenarioState')
+    if scenario:
+        scenario = int(scenario)
+    else:
+        scenario = 0
     last_messages = chating_history[-5:]
     print("Last messages at the /get",last_messages)
-    return Response(chain(user_input, last_messages),mimetype='text/plain') # return get_Chat_response(input)   
+    return Response(chain(user_input, last_messages,scenario),mimetype='text/plain') # return get_Chat_response(input)   
 
 # @app.route("/chating_history", methods=["GET", "POST"])
 # def chating_history():
@@ -229,7 +236,6 @@ def graphml():
 #                 flash("The GraphML is not compilable, Go back to Regenerate! ")
 
 #     return render_template("index_copy.html", debug_output_graphml=graphml_content, img_uri=plot_image_uri, text_data=text_data)
-
 
 if __name__ == '__main__':
     app.run()
