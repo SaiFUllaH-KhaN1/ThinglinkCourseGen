@@ -26,11 +26,14 @@ body{align-items: center; justify-content: center; text-align: center; backgroun
 /* Create two equal columns that floats next to each other */
 .container {
     display: flex;
-    width: 100%;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
 }
 
 .column {
-    padding: 1%;
+    padding: 0.01%;
     box-sizing: border-box;
   }
 
@@ -50,7 +53,7 @@ body{align-items: center; justify-content: center; text-align: center; backgroun
 }
 
 h1{position: absolute;left: 16%;top: 4%; color: aliceblue; font-size: larger; align-items: center;font-family:Arial;}
-h2{position: absolute;left: 18%; bottom: 1%; color: rgb(10, 10, 10); font-size: medium; align-items: center; }
+h2{visibility: hidden; position: absolute;left: 18%; bottom: 1%; color: rgb(10, 10, 10); font-size: medium; align-items: center; }
 
 form {
     display: flex;
@@ -115,6 +118,18 @@ textarea{position: absolute;
 #pdfgenbutton{ background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight:1500; opacity: 0.4;}
 #graphmlgenbutton{background-color: rgb(151, 149, 149); border: none; font-size: 0.85em; font-weight: 900; opacity: 0.4;}
 
+.dropdown{position: relative; top:20%;}
+.dropdown:hover{background-color: rgb(70, 70, 70);background-size: auto;}
+.dropbtn{color: aliceblue; font-family: 'Arial';font-size: 1.5em;background-color: rgba(0, 0, 0, 0);border: none;background-size: auto;}
+.dropbtn:hover{background-color: rgb(70, 70, 70);}
+#myDropdown{display: none;position: absolute;left: 100%;z-index: 1;top:0% ;background-color: rgb(0, 0, 0);}
+.dropdown-element{text-decoration: none;color: aliceblue; font-family: 'Arial';font-size: 1.5em;
+    background-color: rgb(0, 0, 0);border: none;position: relative;display: flex;flex-direction: row;
+    background-size: auto;width: 150%;}
+.dropdown-element:hover{background-color: rgb(70, 70, 70);}
+
+#clearall{position: relative; top: 80%;color: aliceblue; font-family: 'Arial';font-size: 1.5em;}
+#clearall:hover{background-color: rgb(70, 70, 70);background-size: auto;}
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
     #messageFormeight{white-space: pre-line;
@@ -150,7 +165,9 @@ textarea{position: absolute;
         height: 8vh;
         left: 0vh;
         background-color: rgb(10, 10, 10);
-        position:fixed;
+        position: absolute;
+        display: flex;
+        align-items: center;
     }
     #bmainimg{display: none;}
     #img_main {
@@ -175,6 +192,7 @@ textarea{position: absolute;
         background-color: rgb(151, 149, 149); 
         top: 8vh;
         position: absolute;
+        z-index: 0;
     }
     #chat-container {
         border: solid 2px black;
@@ -227,6 +245,19 @@ textarea{position: absolute;
     #imgchat{width: 38px;height: 38px;}
 
     #copyToClipboard{font-size: 1em;}
-    #pdfgenbutton{ font-size: 1em;}
+    #pdfgenbutton{font-size: 1em;}
     #graphmlgenbutton{font-size: 1em;}
+
+    .dropdown{position: absolute; width: 25%;left: 55%; height: fit-content;top: 35%;}
+    .dropdown:hover{background-color: rgb(70, 70, 70);background-size: auto;}
+    .dropbtn{top: 0%;color: aliceblue; font-family: 'Arial';font-size: 2em;background-color: rgba(0, 0, 0, 0);border: none;background-size: auto;}
+    .dropbtn:hover{background-color: rgb(70, 70, 70);}
+    #myDropdown{display: none;position: relative;left: 0%;z-index: 1;background-color: rgb(0, 0, 0);}
+    .dropdown-element{text-decoration: none;color: aliceblue; font-family: 'Arial';font-size: 2em;
+        background-color: rgb(0, 0, 0);border: none;position: relative;display: flex;flex-direction: row;
+        background-size: auto;width: auto;}
+    .dropdown-element:hover{background-color: rgb(70, 70, 70);}
+
+    #clearall{position: absolute;color: aliceblue; font-family: 'Arial';font-size: 2em;top: 39.5%;left: 80%;}
+    #clearall:hover{background-color: rgb(70, 70, 70);background-size: auto;}
 }
