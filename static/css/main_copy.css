@@ -34,6 +34,8 @@ textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; posit
 #width{width: 13%;left: 0.5vw;position: relative;}
 #height{width: 13%;left: 0.5vw;position: relative;} 
 #run{position: relative;left: 0.5vw;}
+#backbtn{position: absolute;display: flex;align-items: center;height: 3%;width: fit-content;top: 1%;left: 0.5%;}  
+#backbtnhref{text-decoration: none;font-size: small;}
 
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
@@ -70,4 +72,5 @@ textarea{color: rgb(0, 0, 0); width: 110vw;min-height: 53vh;max-height: 53vh; po
 #height{left: 1vw;position: relative;font-size: x-large;width: 20%;} 
 #run{font-size: x-large;position: relative;left: 1vw;}
 b{font-size: x-large;left: 0.5vw;position: relative;}
+#backbtnhref{text-decoration: none;font-size: large;font-weight: bolder;}
 }
