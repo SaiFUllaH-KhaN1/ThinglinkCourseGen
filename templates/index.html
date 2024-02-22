@@ -21,6 +21,43 @@
         <div class="container">
             <div class="column left-column">
                 <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="Bot Icon" width="26" height="26" style='border-radius: 0.5em; position: absolute; left: 4%; top: 5.5%;'><b id="bmainimg" style='font: size 1.1em; font-style: italic;font-family: Times New Roman; position: absolute;margin-top: 0.5%;margin-left: 0.5%;'></b><h1>Thinglink Course Gen</h1>
+                
+                <div class="dropdown" onmouseenter="openDropdown()" onmouseleave="closeDropdown()" onchange="myFunction()">
+                    <p class="dropbtn">Select Scenario</p>
+                    <div id="myDropdown" class="dropdown-content">
+                      <a class="dropdown-element" onclick="auto()" id="auto">Auto</a>
+                      <a class="dropdown-element" onclick="linear()" id="linear">Linear</a>
+                      <a class="dropdown-element" onclick="selfexplanatory()" id="selfexplanatory">Self-Exploratory</a>
+                      <a class="dropdown-element" onclick="simulation()" id="simulation">Simulation</a>
+                      <a class="dropdown-element" onclick="escaperoom()" id="escaperoom">Escape Room</a>
+                    </div>
+                </div>
+                <div onclick="clearall()" id="clearall">Clear Session</div>
+                <script>
+                    function clearall(){
+                        sessionStorage.clear();
+                        location.reload();
+                    }
+                    function openDropdown() {
+                        var dropdown = document.getElementById("myDropdown");
+                        dropdown.style.display = "block";
+                    }
+
+                    // Function to close the dropdown menu
+                    function closeDropdown() {
+                        var dropdown = document.getElementById("myDropdown");
+                        dropdown.style.display = "none";
+                    }
+
+                    function myFunction() {
+                    var x = document.getElementById("myDropdown");
+                    if (x.style.display === "block") {
+                        x.style.display = "none";
+                    } else {
+                        x.style.display = "block";
+                    }}                   
+                </script>            
+                </script>
 
                 <h2>Tip:<br>Press the mic button to record, <br>then wait for Bot's <br> response automatically</h2>
             </div>
@@ -114,6 +151,50 @@
             </script>
             
             <script>
+                
+                let scenario=0;
+                function resetDropdownElementsColor() {
+                    var elements = document.getElementsByClassName('dropdown-element');
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].style.color = ''; // Reset color to default
+                    }
+                }
+                function linear() {
+                resetDropdownElementsColor();
+                document.getElementById('linear').style.color= "green";
+                scenario = 1;
+                sessionStorage.setItem('scenarioState','1');
+                location.reload();
+                }
+                function selfexplanatory() {
+                resetDropdownElementsColor();
+                document.getElementById('selfexplanatory').style.color= "green";
+                scenario = 2;
+                sessionStorage.setItem('scenarioState','2');
+                location.reload();
+                }
+                function simulation() {
+                resetDropdownElementsColor();
+                document.getElementById('simulation').style.color= "green";
+                scenario = 3;
+                sessionStorage.setItem('scenarioState','3');
+                location.reload();
+                }
+                function escaperoom() {
+                resetDropdownElementsColor();
+                document.getElementById('escaperoom').style.color= "green";
+                scenario = 4;
+                sessionStorage.setItem('scenarioState','4');
+                location.reload();
+                }
+                function auto() {
+                resetDropdownElementsColor();
+                document.getElementById('auto').style.color= "green";
+                scenario = 0;
+                sessionStorage.setItem('scenarioState','0');
+                location.reload();
+                }
+
                 function scrollToBottom() {
                     var messageContainer = $("#chat-container");
                     messageContainer.scrollTop(messageContainer.prop("scrollHeight"));
@@ -121,6 +202,23 @@
 
               $(document).ready(function() {
                   //sessionStorage.removeItem('chatHistory');
+                  scenarioState = sessionStorage.getItem('scenarioState');
+                  if (scenarioState=='0'){
+                    document.getElementById('auto').style.color= "green";
+                  }
+                  else if (scenarioState=='1'){
+                    document.getElementById('linear').style.color= "green";
+                  }
+                  else if (scenarioState=='2'){
+                    document.getElementById('selfexplanatory').style.color= "green";
+                  }
+                  else if (scenarioState=='3'){
+                    document.getElementById('simulation').style.color= "green";
+                  }
+                  else if (scenarioState=='4'){
+                    document.getElementById('escaperoom').style.color= "green";
+                  }
+                //   alert(sessionStorage.getItem('scenarioState'));
                   loadChatFromSession();
                   
                   console.log("loadChatFromSession called");
@@ -132,6 +230,8 @@
                             $('#p3').fadeOut('fast');
                             $('#p2').fadeOut('fast');
                         }, 1000);
+                      function linear(){
+                        let scenario = 1;};
                       var rawText = $("#user_input").val();
                       var userHtml = "<div><br style='margin-bottom: 0.1em;'><i class='fa fa-user' id='i_user'></i>" + "<p>" +rawText+"</div>";
                       
@@ -149,7 +249,7 @@
                           signal: aborter.signal,
                           method: 'POST',
                           headers: {'Content-Type': 'application/json'},
-                          body: JSON.stringify({ prompt, chating_history })
+                          body: JSON.stringify({ prompt, chating_history,scenarioState })
                       })
                       .then(response => {
                           const reader = response.body.getReader();
