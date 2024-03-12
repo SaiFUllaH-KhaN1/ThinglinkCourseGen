@@ -15,26 +15,33 @@
         <div class="column_left" style="background-color:#aaa;">
 
           <h2>GraphML</h2><button id="backbtn"><a href="/" id="backbtnhref">Go Back</a></button>
-          <div id="loader" class="loader">
+          <!-- <div id="loader" class="loader">
             <img src="/static/icons/ThingLink-Icon.png" id="img_main" alt="..."/><p id="load">Loading...</p>
-          </div>
+          </div> -->
           <!-- <button id="Generate_GraphML_Ini" onclick="Generate_GraphML_Initiate()">Click to generate GraphML</button> -->
           {% if debug_output_graphml %}
           <textarea id="graphcode" name="graphcode" readonly style="visibility: visible;">{{ debug_output_graphml }}</textarea>
           <textarea id="graphtext" style="visibility: hidden;">{{text_data_graphtext}}</textarea>
+          
           {% else %}
           <textarea id="graphcode" name="graphcode" readonly style="visibility: hidden;">{{ debug_output_graphml }}</textarea>
-          <textarea id="graphtext" style="visibility: hidden;">{{text_data_graphtext}}</textarea>
+          <textarea id="graphtext" style="visibility: visible;">{{text_data_graphtext}}</textarea>
+          <button id="GenerateBTN" onclick="Generate_GraphML_Initiate()">Generate GraphML</button>
           {% endif %}
-          <!-- <textarea id="graphcode" name="graphcode" readonly style="visibility: hidden;">{{debug_output_graphml}}</textarea> -->
+
+          
+          <textarea id="streamedContent" name="streamedContent" readonly style="visibility: hidden;"></textarea>
+
         </div>
 
         <div class="column_right" style="background-color:#bbb;">
 
+
           <form id="formforimg" method="get" action="{{url_for('graphml')}}">
             <p><input id="width" type="number" name="width" placeholder="width (default 9)" min="3" max="30" maxlength="2" required/>
-            <input id="height" type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" required/>
-            <input id="run" type="submit" value="Run" style="visibility: visible;"/>
+              <input id="height" type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" required/>
+              <!-- <input id="streamedtext" name="streamedtext" style="visibility: hidden;"/> -->
+            <button id="run" type="submit" value="Run" style="visibility: visible;" onclick="getDatafromStreamedContent()"/>RUN</button>
             {%for message in get_flashed_messages()%}
               <b>{{message}}</b>
             {%endfor%}
@@ -48,47 +55,88 @@
       </div>
 
       <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-          Generate_GraphML_Initiate();
-        });
+        // document.addEventListener('DOMContentLoaded', function() {
+        //   if (!sessionStorage.getItem('graphHistory')){
+        //     Generate_GraphML_Initiate();
+        //     }
+        // });
         function Generate_GraphML_Initiate() {
-          var graphmltext = document.getElementById("graphtext").value; // Use .value to get the content
-          console.log("Sending data:", graphmltext); // Log the data being sent
-          fetch('/graphml', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ graphmltext: graphmltext })
-          })
-          .then(response => {
-              if (!response.ok) { // Checks if response status is not OK
-                  if (response.status === 502) {
-                      // Specific handling for 502 Bad Gateway error
-                      alert('Server error: 502 Bad Gateway. Out of Memory?!');
-                      document.getElementById("loader").style.visibility = "hidden";
-                      // Here you can update the UI to show an appropriate message to the user
-                  }
-                  return Promise.reject('Failed to fetch due to server error: ' + response.status);
-              }
-              return response.json(); // Proceed to process the response if no error
-          })
-          .then(data => {
-              console.log("Received data:", data); // Log the received data
-              if(data.graphml_content) { // Ensure there's GraphML content in the response
-                  document.getElementById("graphcode").value = data.graphml_content;
-                  document.getElementById("graphcode").style.visibility = "visible";
-                  document.getElementById("loader").style.visibility = "hidden";
-              } else {
-                  // Handle error or empty data scenario
-                  alert('No GraphML content received');
-              }
-          })
+            // Corrected the element ID to match your HTML
+            document.getElementById('GenerateBTN').style.visibility = 'hidden';
+            
+            document.getElementById('streamedContent').style.visibility = 'visible';
+            const streamedContent = document.getElementById('streamedContent');
+            var graphmltext = document.getElementById("graphtext").value;
+            document.getElementById('graphtext').style.visibility = 'hidden';
+            console.log("Sending data:", graphmltext);
+
+            fetch('/graphml', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ graphmltext: graphmltext })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Fetch failed:', response.statusText);
+                    return;
+                }
+                // Use the streaming response
+                const reader = response.body.getReader();
+                return new ReadableStream({
+                    start(controller) {
+                        function push() {
+                            reader.read().then(({done, value}) => {
+                                if (done) {
+                                    controller.close();
+                                    return;
+                                }
+                                // Convert the Uint8Array to string and append it to the textarea
+                                const text = new TextDecoder().decode(value);
+                                streamedContent.value += text; // Append the streamed content
+                                push();
+                            }).catch(error => {
+                                console.error('Stream reading failed:', error);
+                                controller.error(error);
+                            });
+                        }
+                        push();
+                    }
+                });
+            })
+            .then(stream => new Response(stream))
+            .then(response => response.text())
+            .catch(error => console.error('Error streaming data:', error));
         }
         function goback(){
           document.getElementById('backbtn').red
         }
+        // function getDatafromStreamedContent(){
+          
+        //   let streamedContent = document.getElementById('streamedContent').value;
+        //   document.getElementById('graphcode').style.visibility = 'visible';
+        //   document.getElementById('graphcode').value = streamedContent;
+        //   let graphcode =  document.getElementById('graphcode').value;
+        //   alert(graphcode);
+        //   document.getElementById('streamedContent').style.visibility = 'hidden';
+        // }
+
+        //   fetch('/graphml', {
+        //       method: 'GET',
+        //       headers: {
+        //           'Content-Type': 'application/json',
+        //       },
+        //       body: JSON.stringify({
+        //           width: width,
+        //           height: height,
+        //           graphcode: graphcode
+        //       })
+        //   }).then(response => {
+        //   console.log(response);
+        //   alert("DONE")
+        // }).catch(error => console.error('Error:', error));}
+
       </script>    
     </body>
 </html>
