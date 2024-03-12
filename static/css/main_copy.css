@@ -1,7 +1,9 @@
+body{overflow-x:hidden;}
+
 .row {
-    display:flex ;
-    width: 100%;
-    height: 100%;
+    display:flex;
+    width:100vw;
+    height: 100vh;
     position: absolute;
 }
 
@@ -19,7 +21,9 @@
 
 /* .img_graph{background-color: rgb(151, 149, 149);position:absolute;top: 5%;right: 5%;} */
 h2{position: relative;left: 10.5vw; color: rgb(3, 3, 3); font-size: larger; align-self: center;font-family:Arial;}
-textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; position: absolute; margin: 0.5%;}
+
+textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; margin: 0.5%;top: 10%;position: absolute;}
+#GenerateBTN{height: 3%;width: fit-content;left: 0.5%;position: absolute;top: 8%;font-weight: bold;}
 
 #Generate_GraphML_Ini{position: absolute; bottom: 5%;margin: 0.5%;left: 6vw;}
 .loader img {
@@ -34,8 +38,10 @@ textarea{color: rgb(0, 0, 0); width: 28%;min-height: 75%;max-height: 100%; posit
 #width{width: 13%;left: 0.5vw;position: relative;}
 #height{width: 13%;left: 0.5vw;position: relative;} 
 #run{position: relative;left: 0.5vw;}
+b{position: relative;left: 0.5vw;}
 #backbtn{position: absolute;display: flex;align-items: center;height: 3%;width: fit-content;top: 1%;left: 0.5%;}  
 #backbtnhref{text-decoration: none;font-size: small;}
+
 
 /* Media Query for smaller screens , min-width is to enable PC to give mobile view */
 @media only screen and (max-width: 1000px) {
