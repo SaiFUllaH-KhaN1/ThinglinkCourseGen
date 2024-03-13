@@ -37,20 +37,21 @@
         <div class="column_right" style="background-color:#bbb;">
 
 
-          <form id="formforimg" method="get" action="{{url_for('graphml')}}">
+          <form id="formforimg" method="post" action="{{url_for('graphml')}}">
             <p><input id="width" type="number" name="width" placeholder="width (default 9)" min="3" max="30" maxlength="2" required/>
               <input id="height" type="number" name="height" placeholder="height (default 6)" min="3" max="30" maxlength="2" required/>
               <!-- <input id="streamedtext" name="streamedtext" style="visibility: hidden;"/> -->
-            <button id="run" type="submit" value="Run" style="visibility: visible;" onclick="getDatafromStreamedContent()"/>RUN</button>
-            {%for message in get_flashed_messages()%}
+            <button id="run" type="button" value="Run" style="visibility: visible;" onclick="getDatafromStreamedContent()"/>RUN</button>
+            <!-- {%for message in get_flashed_messages()%}
               <b>{{message}}</b>
-            {%endfor%}
+            {%endfor%} -->
+            <b></b>
             </p>
           </form>
-          {% if img_uri %}
-            <img src="{{ img_uri }}" alt="Plot Image" id="img_graph">
-          {% endif %}
-
+          <!-- {% if img_uri %} -->
+            <!-- <img src="{{ img_uri }}" alt="Plot Image" id="img_graph"> -->
+          <!-- {% endif %} -->
+          <img src="" alt="Plot Image" id="img_graph" style="visibility: hidden;">
         </div>
       </div>
 
@@ -113,30 +114,88 @@
           document.getElementById('backbtn').red
         }
         // function getDatafromStreamedContent(){
-          
-        //   let streamedContent = document.getElementById('streamedContent').value;
-        //   document.getElementById('graphcode').style.visibility = 'visible';
-        //   document.getElementById('graphcode').value = streamedContent;
-        //   let graphcode =  document.getElementById('graphcode').value;
-        //   alert(graphcode);
-        //   document.getElementById('streamedContent').style.visibility = 'hidden';
-        // }
-
+        //   let width = document.getElementById('width').value;
+        //   let height = document.getElementById('height').value;
+        //   let streamed = document.getElementById('streamedContent').value;
+        // //   let streamedContent = document.getElementById('streamedContent').value;
+        // //   document.getElementById('graphcode').style.visibility = 'visible';
+        // //   document.getElementById('graphcode').value = streamedContent;
+        // //   let graphcode =  document.getElementById('graphcode').value;
+        // //   alert(graphcode);
+        // //   document.getElementById('streamedContent').style.visibility = 'hidden';
+        // // }
+        //   console.log(streamed);
         //   fetch('/graphml', {
-        //       method: 'GET',
+        //       method: 'POST',
         //       headers: {
         //           'Content-Type': 'application/json',
         //       },
         //       body: JSON.stringify({
         //           width: width,
         //           height: height,
-        //           graphcode: graphcode
+        //           graphcode: streamed
         //       })
-        //   }).then(response => {
-        //   console.log(response);
-        //   alert("DONE")
-        // }).catch(error => console.error('Error:', error));}
+        //       .then(response => {
+        //           if (!response.ok) {
+        //               throw new Error('Network response was not ok');
+        //           }
+        //           return response.json(); // or response.text() if the response is not JSON
+        //       }).catch(error => {
+        //       console.error('Error:', error);
+        //       alert('Error: Check console for details.');
+        //       })
+        //     });
+        //     }
+        async function getDatafromStreamedContent() {
+        // event.preventDefault(); // Uncomment if you keep the button type as 'submit'
 
+        let width = document.getElementById('width').value;
+        let height = document.getElementById('height').value;
+        let streamed = document.getElementById('streamedContent').value;
+
+        console.log(streamed);
+
+        try {
+            const response = await fetch('/graphml', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    width: width,
+                    height: height,
+                    graphcode: streamed
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            if (data.img_uri) {
+                let imgGraph = document.getElementById('img_graph');
+                imgGraph.style.visibility = 'visible';
+                // If the img element doesn't exist, create it
+                if (!imgGraph) {
+                    imgGraph = document.createElement('img');
+                    imgGraph.id = 'img_graph'; // Set the ID so it matches your reference
+                    imgGraph.alt = 'Plot Image'; // Set an alt text
+                    document.body.appendChild(imgGraph); // Append the image to the body or another container element
+                }
+                imgGraph.src = data.img_uri;
+                console.log(data.img_uri);
+            }
+            if (data.msg) {
+            document.querySelector('b').innerText = data.msg; 
+            }
+
+            // Update your textarea or handle the response here
+                } catch (error) {
+                    console.error('Error is:', error);
+                    alert('Error: Check console for details.');
+                }
+            }
       </script>    
     </body>
 </html>
