@@ -37,6 +37,8 @@ import os
 app = Flask(__name__)
 app.secret_key = '123'
 
+memory = ConversationBufferWindowMemory(memory_key="chat_history", input_key="human_input", k=5, return_messages=True)
+
 class ThreadedGenerator:
     def __init__(self):
         self.queue = queue.Queue()
@@ -69,12 +71,14 @@ def llm_thread(g, prompt, last_messages,scenario):
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
         print("SCENARIO ====",scenario)
-        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,last_messages)
-        # chating_history = last_messages
+        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,memory)
+        chating_history = last_messages
         print(docs_main)
         # print("chating_history",chating_history)
-        chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) ###,"chat_history": chating_history})
-
+        # chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main,"chat_history": chating_history})
+        
+        chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) #,"chat_history": chating_history})
+        print(memory.load_memory_variables({}))
     finally:
         g.close()
 
@@ -120,8 +124,8 @@ def chat():
         scenario = int(scenario)
     else:
         scenario = 0
-    last_messages = chating_history
-    print("Last messages at the /get",last_messages)
+    last_messages = chating_history[-5:]
+    # print("Last messages at the /get",last_messages)
     # memory = memory
     # last_bot_message = chating_history[-1].get('bot', "") if chating_history else ""
     # memory.save_context({"input": user_input}, {"output": last_bot_message})
