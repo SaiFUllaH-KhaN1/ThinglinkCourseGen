@@ -37,7 +37,7 @@ import os
 app = Flask(__name__)
 app.secret_key = '123'
 
-memory = ConversationBufferWindowMemory(memory_key="chat_history", k=5, return_messages=True)
+memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
 
 class ThreadedGenerator:
     def __init__(self):
@@ -67,7 +67,7 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
 
 def llm_thread(g, prompt, last_messages,scenario):
     try:
-        llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
+        llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
         print("SCENARIO ====",scenario)
@@ -75,7 +75,6 @@ def llm_thread(g, prompt, last_messages,scenario):
         chating_history = last_messages
         print(docs_main)
         # print("chating_history",chating_history)
-        # chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main,"chat_history": chating_history})
         
         chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) #,"chat_history": chating_history})
         print(memory.load_memory_variables({}))
