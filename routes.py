@@ -68,7 +68,7 @@ memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="hum
 
 def llm_thread(g, prompt, last_messages,scenario):
     try:
-        llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
+        llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
         print("SCENARIO ====",scenario)
