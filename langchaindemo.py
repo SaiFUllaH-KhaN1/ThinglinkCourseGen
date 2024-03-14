@@ -162,7 +162,7 @@ def RAG(pdf_file):
 #     Chatbot:"""
 # )
 prompt = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name","chat_history"],
+    input_variables=["input_documents","human_input","subject_name"],#,"chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. You utilize a system
     where there are four scenarios. You prepare the courses adhering to the
@@ -391,7 +391,7 @@ prompt = PromptTemplate(
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}).Remember the information
     relevant to human input in no way overrides the format of a scenario. Use the information content and adhere to the
     format of the scenario you choose with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
-    Chat History: {chat_history}
+
     Chatbot:"""
 )
 
@@ -678,7 +678,7 @@ prompt_escaperoom = PromptTemplate(
 # chain = load_qa_chain(
 #     llm=llm, chain_type="stuff", prompt=prompt
 # )
-memory_LLM = ConversationBufferWindowMemory(k=2,memory_key="chat_history")
+memory_LLM = ConversationBufferWindowMemory(k=2)
 
 def TALK_WITH_RAG(query, docsearch, llm,scenario,memory):
     print("TALK_WITH_RAG Initiated!")
