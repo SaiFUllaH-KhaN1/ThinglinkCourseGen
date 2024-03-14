@@ -396,7 +396,7 @@ prompt = PromptTemplate(
 )
 
 prompt_linear = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
+    input_variables=["input_documents","human_input","subject_name", "chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Linear scenario given as example below, suitable to the type of information which
@@ -450,11 +450,12 @@ prompt_linear = PromptTemplate(
     \n\nEND OF EXAMPLE\n\n
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
+    Chat history: {chat_history}
     Chatbot:"""
 )
 
 prompt_selfexploratory = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
+    input_variables=["input_documents","human_input","subject_name", "chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Self-Exploratory scenario given as example below, suitable to the type of information which
@@ -512,11 +513,12 @@ prompt_selfexploratory = PromptTemplate(
     scenarios.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
+    Chat history: {chat_history}    
     Chatbot:"""
 )
 
 prompt_simulation = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
+    input_variables=["input_documents","human_input","subject_name", "chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Simulation scenario given as example below, suitable to the type of information which
@@ -592,11 +594,12 @@ prompt_simulation = PromptTemplate(
     scenarios.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
+    Chat history: {chat_history}
     Chatbot:"""
 )
 
 prompt_escaperoom = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
+    input_variables=["input_documents","human_input","subject_name", "chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Escape Room scenario given as example below, suitable to the type of information which
@@ -673,6 +676,7 @@ prompt_escaperoom = PromptTemplate(
     scenarios.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
+    Chat history: {chat_history}
     Chatbot:"""
 )
 # chain = load_qa_chain(
