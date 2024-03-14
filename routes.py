@@ -63,26 +63,26 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs):
         self.gen.send(token)
 
-def llm_thread(g, prompt, memory,scenario):
+def llm_thread(g, prompt, last_messages,scenario):
     try:
-        llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
+        llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
         print("SCENARIO ====",scenario)
-        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,memory)
+        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,last_messages)
         # chating_history = last_messages
         print(docs_main)
         # print("chating_history",chating_history)
-        chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) #,"chat_history": chating_history})
-        print(memory.load_memory_variables({}))
+        chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) ###,"chat_history": chating_history})
+
     finally:
         g.close()
 
 
-def chain(prompt, memory,scenario):
+def chain(prompt, last_messages,scenario):
     if prompt != "":
         g = ThreadedGenerator()
-        threading.Thread(target=llm_thread, args=(g, prompt, memory,scenario)).start()
+        threading.Thread(target=llm_thread, args=(g, prompt, last_messages,scenario)).start()
         return g
 
 @app.route("/", methods=["GET", "POST"])
@@ -109,7 +109,6 @@ def index():
 
     return render_template('index.html', filename=filename, file_uploaded=session.get('file_uploaded', False))
 
-memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
 
 @app.route("/get", methods=["GET", "POST"])
 def chat():
@@ -121,14 +120,13 @@ def chat():
         scenario = int(scenario)
     else:
         scenario = 0
-    # last_messages = chating_history[-5:]
-    # print("Last messages at the /get",last_messages)
+    last_messages = chating_history[-5:]
+    print("Last messages at the /get",last_messages)
     # memory = memory
     # last_bot_message = chating_history[-1].get('bot', "") if chating_history else ""
     # memory.save_context({"input": user_input}, {"output": last_bot_message})
-    memory.load_memory_variables({})
 
-    return Response(chain(user_input, memory, scenario),mimetype='text/plain') # return get_Chat_response(input)   
+    return Response(chain(user_input, last_messages, scenario),mimetype='text/plain') # return get_Chat_response(input)   
 
 
 @app.route('/graphml', methods=['GET', 'POST'])
