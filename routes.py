@@ -6,7 +6,7 @@ from langchain_community.llms import OpenAI
 from langchain_community.chat_models import ChatOpenAI
 import os
 import openai
-from langchain.chains.conversation.memory import ConversationBufferMemory
+from langchain.chains.conversation.memory import ConversationBufferMemory, ConversationBufferWindowMemory
 from openai import OpenAI
 from langchain.prompts import BaseChatPromptTemplate, PromptTemplate
 from langchain.chains import LLMChain
