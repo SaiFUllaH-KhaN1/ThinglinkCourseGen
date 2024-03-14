@@ -162,7 +162,7 @@ def RAG(pdf_file):
 #     Chatbot:"""
 # )
 prompt = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name"],#,"chat_history"],
+    input_variables=["input_documents","human_input","subject_name","chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. You utilize a system
     where there are four scenarios. You prepare the courses adhering to the
@@ -391,7 +391,7 @@ prompt = PromptTemplate(
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}).Remember the information
     relevant to human input in no way overrides the format of a scenario. Use the information content and adhere to the
     format of the scenario you choose with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
-
+    Chat history: {chat_history}
     Chatbot:"""
 )
 
@@ -678,7 +678,7 @@ prompt_escaperoom = PromptTemplate(
 # chain = load_qa_chain(
 #     llm=llm, chain_type="stuff", prompt=prompt
 # )
-memory_LLM = ConversationBufferWindowMemory(k=2)
+
 
 def TALK_WITH_RAG(query, docsearch, llm,scenario,memory):
     print("TALK_WITH_RAG Initiated!")
@@ -687,27 +687,22 @@ def TALK_WITH_RAG(query, docsearch, llm,scenario,memory):
     # chain = load_qa_chain(
     #     llm=llm, chain_type="stuff", prompt=prompt
     # )
-    user = memory[-1].get('user', "") if memory else ""
-    print("LCD USER",user)
-    bot = memory[-1].get('bot', "") if memory else ""
-    print("LCD BOT",bot)
-    memory_LLM.save_context({"input": user}, {"output": bot})
-    print(memory_LLM.load_memory_variables({}))
+
     if scenario == 1:
-        chain = LLMChain(prompt=prompt_linear, llm=llm,memory=memory_LLM)
+        chain = LLMChain(prompt=prompt_linear, llm=llm,memory=memory)
         print("SCENARIO ====prompt_linear",scenario)
     elif scenario == 2:
-        chain = LLMChain(prompt=prompt_selfexploratory, llm=llm,memory=memory_LLM)
+        chain = LLMChain(prompt=prompt_selfexploratory, llm=llm,memory=memory)
         print("SCENARIO ====prompt_selfexploratory",scenario)
     elif scenario == 3:
-        chain = LLMChain(prompt=prompt_simulation, llm=llm,memory=memory_LLM)
+        chain = LLMChain(prompt=prompt_simulation, llm=llm,memory=memory)
         print("SCENARIO ====prompt_simulation",scenario)
     elif scenario == 4:
-        chain = LLMChain(prompt=prompt_escaperoom, llm=llm,memory=memory_LLM)
+        chain = LLMChain(prompt=prompt_escaperoom, llm=llm,memory=memory)
         print("SCENARIO ====prompt_escaperoom",scenario)
     elif scenario == 0:
         print("SCENARIO ====PROMPT",scenario)
-        chain = LLMChain(prompt=prompt, llm=llm,memory=memory_LLM)
+        chain = LLMChain(prompt=prompt, llm=llm,memory=memory)
     
     ### Static Query###   
     docs_page_contents = [doc.page_content for doc in docs]
