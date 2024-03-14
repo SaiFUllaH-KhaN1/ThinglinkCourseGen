@@ -37,7 +37,7 @@ import os
 app = Flask(__name__)
 app.secret_key = '123'
 
-memory = ConversationBufferWindowMemory(memory_key="chat_history", input_key="human_input", k=5, return_messages=True)
+memory = ConversationBufferWindowMemory(memory_key="chat_history", k=5, return_messages=True)
 
 class ThreadedGenerator:
     def __init__(self):
