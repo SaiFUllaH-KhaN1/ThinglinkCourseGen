@@ -120,7 +120,7 @@ def chat():
         scenario = int(scenario)
     else:
         scenario = 0
-    last_messages = chating_history[-5:]
+    last_messages = chating_history
     print("Last messages at the /get",last_messages)
     # memory = memory
     # last_bot_message = chating_history[-1].get('bot', "") if chating_history else ""
