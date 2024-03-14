@@ -168,7 +168,7 @@ prompt = PromptTemplate(
     You are an educational chat bot that helps in building training courses for human. You utilize a system
     where there are four scenarios. You prepare the courses adhering to the
     format of one of the four scenarios given as examples below, suitable to the type of information which
-    is relevant to the human's input query or prompt.
+    is relevant to the human's input query or prompt. 
 
     The four scenarios and their introduction are Escape Room (useful for gamifying a certain learning
     situation such that human is given a scene to utilize the knowledge regarding a 
@@ -192,6 +192,12 @@ prompt = PromptTemplate(
     \n\nEXAMPLE FORMAT FOR EACH SCENARIO\n\n
     \nSIMULATION SCENARIO:\n
     'SIMULATION SCENARIO':
+    'Learning Objectives':
+    - Navigate through a corporate archive section to understand its layout and the function of different sub-sections.
+    - Identify the operational processes within the printing office, including the use and benefits of specific equipment like scanners and printers.
+    - Explore the management and correspondence functions within the head office, including team organization and documentation.
+    - Investigate the library section to learn how publications are stored, accessed, and managed digitally and physically.
+    - Apply decision-making skills to explore detailed aspects of archive management, such as digital storage solutions and publication cataloging.
     'Topic': Introduction to the Archive Section
     'Scenario': You are in the main lounge of a company building on your first day for an office tour. You are being shown an Archive Section where there different sub-sections situated at the left, right and upstairs from the main lounge.
     [Media belonging to 'Scenario', Description: A 360-degree image of a corporate lounge with paths leading to the left, right, and upstairs. Overlay Tags: Tag 1 - 'Left Path': An arrow pointing left with a caption: "To the Printing Office". Tag 2 - 'Right Path': An arrow pointing right with a caption: "To the Library". Tag 3 - 'Upstairs': An arrow pointing upwards with a caption: "To the Head Office".]
@@ -244,6 +250,12 @@ prompt = PromptTemplate(
 
     \nSelf-Exploratory Scenario:\n
     'Self-Exploratory Scenario':
+    'Learning Objectives':
+    - Differentiate between various types of renewable energy sources, such as wind and solar energy.
+    - Understand the basic mechanisms behind how wind turbines and solar panels generate electricity.
+    - Recognize the environmental and societal benefits of transitioning to renewable energy sources.
+    - Engage with interactive media to explore the technical and environmental aspects of renewable energies.
+    - Apply critical thinking to assess the impact of renewable energy on reducing carbon footprint and greenhouse gas emissions.
     'Topic': Introduction to Renewable Energy
     'Scenario':
     The world is shifting towards renewable energy sources to combat climate change and reduce greenhouse gas emissions. This scenario explores different types of renewable energy, how they are harnessed, and their impact on the environment and society.
@@ -277,6 +289,12 @@ prompt = PromptTemplate(
     
     \nLINEAR SCENARIO:\n
     'LINEAR SCENARIO':
+    'Learning Objectives':
+    - Identify the basic steps in tying shoe laces.
+    - Understand the importance of starting with even laces for effective tying.
+    - Learn to create and manipulate loops to form a basic shoe lace knot.
+    - Recognize different styles of laces and their tying techniques through media interaction.
+    - Apply knowledge through quiz questions to reinforce learning of the shoe lace tying process.
     'Topic': How to Tie Shoe Laces
     [Media belonging to 'Topic', Image Description: An array of shoes with different styles of laces displayed on a white background. Overlay Tags: Tag 1 - 'Flat Laces', Tag 2 - 'Round Laces', Tag 3 - 'Colorful Laces'. Each tag, when clicked, leads to a short video showcasing the lacing technique for that style.]
     'Point 1': Ensure your shoe laces are even on both sides. Hold the ends of your laces, making sure they are of equal length.
@@ -306,6 +324,12 @@ prompt = PromptTemplate(
 
     \nESCAPE ROOM SCENARIO:\n
     'ESCAPE ROOM SCENARIO':
+    'Learning Objectives':
+    - Recognize the importance of quick and informed decision-making during a fire emergency.
+    - Identify fire safety protocols, including the avoidance of elevators and the use of staircases for evacuation.
+    - Implement strategies to minimize smoke inhalation, such as covering your nose and mouth and staying low to the ground.
+    - Evaluate the safest exit routes, understanding the difference between familiar exits and potentially dangerous shortcuts.
+    - Practice locating and moving to designated assembly points post-evacuation for accountability and further instructions from emergency services.
     'Topic': Exiting the Building in a Fire Emergency
     'Introduction': You're in a multi-story building when an alarm sounds, signaling a fire emergency. Smoke is starting to fill the corridors, and it's imperative to leave the building as quickly and safely as possible. Your actions and decisions will determine your fate.
     [Media belonging to 'Introduction': Description: A 360-degree image of a smoke-filled corridor with emergency lights flashing. Overlay Tags: Tag 1 - 'Emergency Lighting': An arrow or glow around the emergency lights to guide the way. Tag 2 - 'Smoke Density': Visual cues on the smoke's density, suggesting lower areas have less smoke.]
@@ -365,15 +389,15 @@ prompt = PromptTemplate(
     Give concise, relevant, clear, and descriptive instructions
     as you are a course creator that has expertise in molding asked information into one of the above four
     scenarios.
-    You have the context and history of conversation at here: {chat_history}.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}).Remember the information
     relevant to human input in no way overrides the format of a scenario. Use the information content and adhere to the
     format of the scenario you choose with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
+    Chat History: {chat_history}
     Chatbot:"""
 )
 
 prompt_linear = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name","chat_history"],
+    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Linear scenario given as example below, suitable to the type of information which
@@ -425,14 +449,13 @@ prompt_linear = PromptTemplate(
     Score: 5 points
     'Total Score: 15 points'
     \n\nEND OF EXAMPLE\n\n
-    You have the context and history of conversation at here: {chat_history}.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
     Chatbot:"""
 )
 
 prompt_selfexploratory = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name","chat_history"],
+    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Self-Exploratory scenario given as example below, suitable to the type of information which
@@ -488,14 +511,13 @@ prompt_selfexploratory = PromptTemplate(
     Give concise, relevant, clear, and descriptive instructions
     as you are a course creator that has expertise in molding asked information into one of the above four
     scenarios.
-    You have the context and history of conversation at here: {chat_history}.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
     Chatbot:"""
 )
 
 prompt_simulation = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name","chat_history"],
+    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Simulation scenario given as example below, suitable to the type of information which
@@ -569,14 +591,13 @@ prompt_simulation = PromptTemplate(
     Give concise, relevant, clear, and descriptive instructions
     as you are a course creator that has expertise in molding asked information into one of the above four
     scenarios.
-    You have the context and history of conversation at here: {chat_history}.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
     Chatbot:"""
 )
 
 prompt_escaperoom = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name","chat_history"],
+    input_variables=["input_documents","human_input","subject_name"], #,"chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. 
     You prepare the courses adhering to the format of the Escape Room scenario given as example below, suitable to the type of information which
@@ -651,7 +672,6 @@ prompt_escaperoom = PromptTemplate(
     Give concise, relevant, clear, and descriptive instructions
     as you are a course creator that has expertise in molding asked information into one of the above four
     scenarios.
-    You have the context and history of conversation at here: {chat_history}.
     Human: {human_input},{subject_name},Information relevant to human input:({input_documents}). Use the information content 
     to mold the response that adheres to the format of this scenario with all the tags, including [Media belonging to #]  tags enclosed in the single quotation marks ''.
     Chatbot:"""
@@ -660,7 +680,7 @@ prompt_escaperoom = PromptTemplate(
 #     llm=llm, chain_type="stuff", prompt=prompt
 # )
 
-def TALK_WITH_RAG(query, docsearch, llm,scenario):
+def TALK_WITH_RAG(query, docsearch, llm,scenario,memory):
     print("TALK_WITH_RAG Initiated!")
     docs = docsearch.similarity_search(query, k=3)
     docs_main = " ".join([d.page_content for d in docs])
@@ -668,20 +688,20 @@ def TALK_WITH_RAG(query, docsearch, llm,scenario):
     #     llm=llm, chain_type="stuff", prompt=prompt
     # )
     if scenario == 1:
-        chain = LLMChain(prompt=prompt_linear, llm=llm)
+        chain = LLMChain(prompt=prompt_linear, llm=llm,memory=memory)
         print("SCENARIO ====prompt_linear",scenario)
     elif scenario == 2:
-        chain = LLMChain(prompt=prompt_selfexploratory, llm=llm)
+        chain = LLMChain(prompt=prompt_selfexploratory, llm=llm,memory=memory)
         print("SCENARIO ====prompt_selfexploratory",scenario)
     elif scenario == 3:
-        chain = LLMChain(prompt=prompt_simulation, llm=llm)
+        chain = LLMChain(prompt=prompt_simulation, llm=llm,memory=memory)
         print("SCENARIO ====prompt_simulation",scenario)
     elif scenario == 4:
-        chain = LLMChain(prompt=prompt_escaperoom, llm=llm)
+        chain = LLMChain(prompt=prompt_escaperoom, llm=llm,memory=memory)
         print("SCENARIO ====prompt_escaperoom",scenario)
     elif scenario == 0:
         print("SCENARIO ====PROMPT",scenario)
-        chain = LLMChain(prompt=prompt, llm=llm)
+        chain = LLMChain(prompt=prompt, llm=llm,memory=memory)
     
     ### Static Query###   
     docs_page_contents = [doc.page_content for doc in docs]
