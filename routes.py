@@ -37,7 +37,6 @@ import os
 app = Flask(__name__)
 app.secret_key = '123'
 
-memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
 
 class ThreadedGenerator:
     def __init__(self):
@@ -64,6 +63,8 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
 
     def on_llm_new_token(self, token: str, **kwargs):
         self.gen.send(token)
+
+memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
 
 def llm_thread(g, prompt, last_messages,scenario):
     try:
