@@ -1,42 +1,7 @@
-from flask import Flask, render_template, request, Response, jsonify, session, send_from_directory, flash, redirect, url_for
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain_community.vectorstores import FAISS
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain_community.llms import OpenAI
-from langchain_community.chat_models import ChatOpenAI
-import os
-import openai
-from langchain.chains.conversation.memory import ConversationBufferMemory, ConversationBufferWindowMemory
-from openai import OpenAI
-from langchain.prompts import BaseChatPromptTemplate, PromptTemplate
-from langchain.chains import LLMChain
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    HumanMessagePromptTemplate,
-    SystemMessagePromptTemplate,
-)
-from langchain.schema import HumanMessage, SystemMessage
-from dotenv import load_dotenv
-import requests
-import json
-import langchaindemo as LCD
-import threading
-import queue
-from langchain.chains.question_answering import load_qa_chain
-from langchain.chat_models import ChatOpenAI
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
-
-load_dotenv(dotenv_path="HUGGINGFACEHUB_API_TOKEN.env")
-# Set the API key for OpenAI
-openai.api_key = os.getenv('OPENAI_API_KEY')
-client = OpenAI()
-import io
-import os
-
 app = Flask(__name__)
 app.secret_key = '123'
 
+memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
 
 class ThreadedGenerator:
     def __init__(self):
@@ -64,29 +29,26 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs):
         self.gen.send(token)
 
-memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
-
-def llm_thread(g, prompt, last_messages,scenario):
+def llm_thread(g, prompt, chating_history,scenario):
     try:
-        llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
+        llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
         print("SCENARIO ====",scenario)
-        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,memory)
-        chating_history = last_messages
+        chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,chating_history)
+        # chating_history = last_messages
         print(docs_main)
-        # print("chating_history",chating_history)
-        
-        chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) #,"chat_history": chating_history})
-        print(memory.load_memory_variables({}))
+        print("chating_history",chating_history)
+        # chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) #,"chat_history": chating_history})
+        chain.invoke({"input_documents": docs_main,"subject_name": subject_name,"human_input": query,"chat_history": chating_history})
     finally:
         g.close()
 
 
-def chain(prompt, last_messages,scenario):
+def chain(prompt, chating_history,scenario):
     if prompt != "":
         g = ThreadedGenerator()
-        threading.Thread(target=llm_thread, args=(g, prompt, last_messages,scenario)).start()
+        threading.Thread(target=llm_thread, args=(g, prompt, chating_history,scenario)).start()
         return g
 
 @app.route("/", methods=["GET", "POST"])
@@ -124,13 +86,14 @@ def chat():
         scenario = int(scenario)
     else:
         scenario = 0
-    last_messages = chating_history[-5:]
+    chating_history = chating_history[-2:]
     # print("Last messages at the /get",last_messages)
     # memory = memory
     # last_bot_message = chating_history[-1].get('bot', "") if chating_history else ""
     # memory.save_context({"input": user_input}, {"output": last_bot_message})
+    memory.load_memory_variables({})
 
-    return Response(chain(user_input, last_messages, scenario),mimetype='text/plain') # return get_Chat_response(input)   
+    return Response(chain(user_input, chating_history, scenario),mimetype='text/plain') # return get_Chat_response(input)   
 
 
 @app.route('/graphml', methods=['GET', 'POST'])
