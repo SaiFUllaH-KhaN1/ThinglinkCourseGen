@@ -1,4 +1,6 @@
 import soundfile as sf
+from langchain_core.runnables import RunnableLambda, RunnablePassthrough
+from operator import itemgetter
 from langchain_community.llms import HuggingFaceHub
 from langchain.chains import ConversationChain
 from langchain_community.chat_models import ChatOpenAI
@@ -162,7 +164,7 @@ def RAG(pdf_file):
 #     Chatbot:"""
 # )
 prompt = PromptTemplate(
-    input_variables=["input_documents","human_input","subject_name","chat_history"],
+    input_variables=["input_documents","human_input","subject_name", "chat_history"],
     template="""
     You are an educational chat bot that helps in building training courses for human. You utilize a system
     where there are four scenarios. You prepare the courses adhering to the
@@ -683,14 +685,23 @@ prompt_escaperoom = PromptTemplate(
 #     llm=llm, chain_type="stuff", prompt=prompt
 # )
 
-
-def TALK_WITH_RAG(query, docsearch, llm,scenario,memory):
+def TALK_WITH_RAG(query, docsearch, llm,scenario,chating_history):
     print("TALK_WITH_RAG Initiated!")
     docs = docsearch.similarity_search(query, k=3)
     docs_main = " ".join([d.page_content for d in docs])
     # chain = load_qa_chain(
     #     llm=llm, chain_type="stuff", prompt=prompt
     # )
+
+    #Memory Make
+    memory = ConversationBufferMemory(return_messages=True)
+    # Iterate over each pair of user and bot messages
+    for pair in chating_history:
+        user_message = pair['user']
+        bot_message = pair['bot']
+        # Save the context of each conversation pair to memory
+        memory.save_context({"input": user_message}, {"output": bot_message})
+    # print(memory.load_memory_variables({}))
 
     if scenario == 1:
         chain = LLMChain(prompt=prompt_linear, llm=llm,memory=memory)
@@ -706,7 +717,8 @@ def TALK_WITH_RAG(query, docsearch, llm,scenario,memory):
         print("SCENARIO ====prompt_escaperoom",scenario)
     elif scenario == 0:
         print("SCENARIO ====PROMPT",scenario)
-        chain = LLMChain(prompt=prompt, llm=llm,memory=memory)
+        chain = prompt | llm 
+        #chain = LLMChain(prompt=prompt, llm=llm,memory=memory)
     
     ### Static Query###   
     docs_page_contents = [doc.page_content for doc in docs]
