@@ -1,3 +1,39 @@
+from flask import Flask, render_template, request, Response, jsonify, session, send_from_directory, flash, redirect, url_for
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain_community.vectorstores import FAISS
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.llms import OpenAI
+from langchain_community.chat_models import ChatOpenAI
+import os
+import openai
+from langchain.chains.conversation.memory import ConversationBufferMemory, ConversationBufferWindowMemory
+from openai import OpenAI
+from langchain.prompts import BaseChatPromptTemplate, PromptTemplate
+from langchain.chains import LLMChain
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
+from langchain.schema import HumanMessage, SystemMessage
+from dotenv import load_dotenv
+import requests
+import json
+import langchaindemo as LCD
+import threading
+import queue
+from langchain.chains.question_answering import load_qa_chain
+from langchain.chat_models import ChatOpenAI
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
+
+load_dotenv(dotenv_path="HUGGINGFACEHUB_API_TOKEN.env")
+# Set the API key for OpenAI
+openai.api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI()
+import io
+import os
+
 app = Flask(__name__)
 app.secret_key = '123'
 
