@@ -941,8 +941,8 @@ def TALK_WITH_RAG(query, docsearch, llm,scenario,chating_history):
         bot_message = pair['bot']
         # Save the context of each conversation pair to memory
         # memory.save_context({"input": user_message}, {"output": bot_message})
-        memory.chat_memory.add_user_message(user_message)
-        memory.chat_memory.add_ai_message(bot_message)
+        # memory.chat_memory.add_user_message(user_message)
+        # memory.chat_memory.add_ai_message(bot_message)
     # llm_memory = memory.load_memory_variables({})
 
     if scenario == 1:
