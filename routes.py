@@ -37,8 +37,6 @@ import os
 app = Flask(__name__)
 app.secret_key = '123'
 
-memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
-
 class ThreadedGenerator:
     def __init__(self):
         self.queue = queue.Queue()
@@ -67,16 +65,28 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
 
 def llm_thread(g, prompt, chating_history,scenario):
     try:
-        llm = ChatOpenAI(model="gpt-3.5-turbo-16k-0613", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
+
+        # #Memory Make
+        # memory = ConversationBufferMemory(return_messages=True)
+        # # Iterate over each pair of user and bot messages
+        # for pair in chating_history:
+        #     user_message = pair['user']
+        #     bot_message = pair['bot']
+        #     # Save the context of each conversation pair to memory
+        #     memory.save_context({"input": user_message}, {"output": bot_message})
+        # llm_memory = memory.load_memory_variables({})
+
+        llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.1, streaming=True, verbose= True,callbacks=[ChainStreamHandler(g)])
         embeddings = OpenAIEmbeddings()
         load_docsearch = FAISS.load_local("faiss_index",embeddings)
         print("SCENARIO ====",scenario)
         chain, docs_main, query, subject_name = LCD.TALK_WITH_RAG(prompt, load_docsearch,llm,scenario,chating_history)
         # chating_history = last_messages
-        print(docs_main)
-        print("chating_history",chating_history)
+        # print(docs_main)
+        # print("chating_history",chating_history)
         # chain.run({"human_input": query, "subject_name": subject_name, "input_documents": docs_main}) #,"chat_history": chating_history})
-        chain.invoke({"input_documents": docs_main,"subject_name": subject_name,"human_input": query,"chat_history": chating_history})
+        # chain.invoke({"input_documents": docs_main,"subject_name": subject_name,"human_input": query,"chat_history": chating_history})
+        chain({"input_documents": docs_main,"subject_name": subject_name,"human_input": query})
     finally:
         g.close()
 
@@ -122,12 +132,12 @@ def chat():
         scenario = int(scenario)
     else:
         scenario = 0
-    chating_history = chating_history[-2:]
+    chating_history = chating_history[-10:]
     # print("Last messages at the /get",last_messages)
     # memory = memory
     # last_bot_message = chating_history[-1].get('bot', "") if chating_history else ""
     # memory.save_context({"input": user_input}, {"output": last_bot_message})
-    memory.load_memory_variables({})
+    # memory.load_memory_variables({})
 
     return Response(chain(user_input, chating_history, scenario),mimetype='text/plain') # return get_Chat_response(input)   
 
@@ -528,3 +538,4 @@ def graphml():
 
 if __name__ == '__main__':
     app.run()
+
