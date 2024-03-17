@@ -923,7 +923,6 @@ prompt_escaperoom = PromptTemplate(
 # chain = load_qa_chain(
 #     llm=llm, chain_type="stuff", prompt=prompt
 # )
-memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
 
 def TALK_WITH_RAG(query, docsearch, llm,scenario,chating_history):
     print("TALK_WITH_RAG Initiated!")
@@ -934,15 +933,15 @@ def TALK_WITH_RAG(query, docsearch, llm,scenario,chating_history):
     # )
 
     #Memory Make
-
+    memory = ConversationBufferWindowMemory(memory_key="chat_history",input_key="human_input",k=5,return_messages=True)
     # Iterate over each pair of user and bot messages
     for pair in chating_history:
         user_message = pair['user']
         bot_message = pair['bot']
         # Save the context of each conversation pair to memory
         # memory.save_context({"input": user_message}, {"output": bot_message})
-        # memory.chat_memory.add_user_message(user_message)
-        # memory.chat_memory.add_ai_message(bot_message)
+        memory.chat_memory.add_user_message(user_message)
+        memory.chat_memory.add_ai_message(bot_message)
     # llm_memory = memory.load_memory_variables({})
 
     if scenario == 1:
